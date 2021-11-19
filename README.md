@@ -5,8 +5,8 @@ For many the world revolves around sports. Streaming games, betting parlays, vis
 ```bash
 docker-build .
 docker-compose run django bash
-python manage.py migrate
-python manage.py createsuperuser
+#python manage.py migrate
+#python manage.py createsuperuser
 ```
 
 ## Getting Started
@@ -14,8 +14,6 @@ To run Find the Game app simply,
 ```bash
 docker-compose up
 ```
-See in-app menus for help with using specific features.
-
 ## User Stories
 As a single user, I want to have a place to find other users so I can organize a game that we all want to play.
 **Acceptance Criteria**
