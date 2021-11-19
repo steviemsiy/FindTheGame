@@ -30,23 +30,26 @@ class ApiKey(models.Model):
 class ApiKeyAdmin(admin.ModelAdmin):
     list_display = ('owner','key')
 
-class Plant(models.Model):
+class Profile(models.Model):
     name = models.CharField(max_length=5000, blank=False)
     age = models.IntegerField()
-    species = models.ForeignKey('Plant', on_delete=models.CASCADE)
+    experience = models.CharField(max_length = 5000, blank=False)
+    STYLE = (
+        ('Serious Players Only','Serious Players Only'),
+        ('Play Hard, not Hurt','Play Hard, not Hurt'),
+        ('Just Having Fun','Just Having Fun'),
+    )
+    level = models.CharField(max_length=5000, choices=STYLE)
     
 
-class Species(models.Model):
-    SIZES = (
-        ('Tiny','Tiny'),
-        ('Small','Small'),
-        ('Medium','Medium'),
-        ('Large','Large'),
-    )
+class Group(models.Model):
     name = models.CharField(max_length=5000, blank=False)
-    size = models.CharField(max_length=5000, choices=SIZES)
-    water_requirement = models.IntegerField(default = '1',validators=[MinValueValidator(1), MaxValueValidator(1000)])
-    Humidity = models.IntegerField(default = '1',validators=[MinValueValidator(0), MaxValueValidator(100)])
-    Harvest_age = models.IntegerField(default = '1', validators=[MinValueValidator(1), MaxValueValidator(10)])
-    nutrient_amount = models.IntegerField(default = '1',validators=[MinValueValidator(1), MaxValueValidator(10)])
-    tempurature = models.IntegerField(default = '33',validators=[MinValueValidator(33), MaxValueValidator(100)])
+    players = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    
+class Game(models.Model):
+    sport = models.CharField(max_length=5000, blank=False)
+    location = models.CharField(max_length=5000, blank=False)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    
+    
+    
