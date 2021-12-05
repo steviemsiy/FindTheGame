@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from api.models import Plant
-from api.models import Species
+from api.models import Profile
+from api.models import Group
+from api.models import Game
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,7 +12,7 @@ class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = '__all__'
-        
+
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game

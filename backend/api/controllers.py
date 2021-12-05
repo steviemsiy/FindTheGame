@@ -26,7 +26,7 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from api.serializers import PlantSerializer, SpeciesSerializer
+from api.serializers import ProfileSerializer, GroupSerializer, GameSerializer
 
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.permissions import *
@@ -124,7 +124,7 @@ class Events(APIView):
     permission_classes = (AllowAny,)
     parser_classes = (parsers.JSONParser,parsers.FormParser)
     renderer_classes = (renderers.JSONRenderer, )
-      
+
 class ActivateIFTTT(APIView):
     permission_classes = (AllowAny,)
     parser_classes = (parsers.JSONParser,parsers.FormParser)
@@ -171,4 +171,3 @@ class ActivateIFTTT(APIView):
         newEvent.save()
         print 'New Event Logged'
         return Response({'success': True}, status=status.HTTP_200_OK)
-
