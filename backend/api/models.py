@@ -30,8 +30,20 @@ class ApiKey(models.Model):
 class ApiKeyAdmin(admin.ModelAdmin):
     list_display = ('owner','key')
 
-class Profile(models.Model):
+#class Profile(models.Model):
+#    name = models.CharField(max_length=5000, blank=False)
+#    #user = models.ForeignKey(User, unique=True)
+#    age = models.IntegerField()
+#    experience = models.CharField(max_length = 5000, blank=False)
+#    STYLE = (
+#        ('Serious Players Only','Serious Players Only'),
+#        ('Play Hard, not Hurt','Play Hard, not Hurt'),
+#    )
+#    level = models.CharField(max_length=5000, choices=STYLE)
+
+class PlayerProfile(models.Model):
     name = models.CharField(max_length=5000, blank=False)
+    user = models.ForeignKey(User, unique=True)
     age = models.IntegerField()
     experience = models.CharField(max_length = 5000, blank=False)
     STYLE = (
@@ -40,16 +52,20 @@ class Profile(models.Model):
         ('Just Having Fun','Just Having Fun'),
     )
     level = models.CharField(max_length=5000, choices=STYLE)
-    
+
+    class Meta:
+        ordering = ['name']
 
 class Group(models.Model):
     name = models.CharField(max_length=5000, blank=False)
-    players = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    
+    players = models.ManyToManyField(PlayerProfile)
+
+    class Meta:
+        ordering = ['name']
+
 class Game(models.Model):
     sport = models.CharField(max_length=5000, blank=False)
     location = models.CharField(max_length=5000, blank=False)
+    date = models.DateTimeField()
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
-    
-    
-    
+    participants = models.ManyToManyField(PlayerProfile)

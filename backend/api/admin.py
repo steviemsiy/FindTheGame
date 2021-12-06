@@ -8,6 +8,6 @@ from api.models import *
 # Register your models here.
 admin.site.register(Event, EventAdmin)
 admin.site.register(ApiKey, ApiKeyAdmin)
-admin.site.register(Profile)
+admin.site.register(PlayerProfile)
 admin.site.register(Group)
 admin.site.register(Game)

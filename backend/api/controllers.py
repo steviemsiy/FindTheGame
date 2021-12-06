@@ -26,7 +26,7 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from api.serializers import ProfileSerializer, GroupSerializer, GameSerializer
+from api.serializers import GroupSerializer, GameSerializer, PlayerProfileSerializer
 
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.permissions import *
@@ -61,17 +61,18 @@ class Register(APIView):
 
     def post(self, request, *args, **kwargs):
         # Login
-        username = request.POST.get('username') #you need to apply validators to these
+        #serializer = PlayerProfileSerializer(request.data)
+        username = request.data['username'] #you need to apply validators to these
+        print request.data
         print username
-        password = request.POST.get('password') #you need to apply validators to these
-        email = request.POST.get('email') #you need to apply validators to these
-        gender = request.POST.get('gender') #you need to apply validators to these
-        age = request.POST.get('age') #you need to apply validators to these
-        educationlevel = request.POST.get('educationlevel') #you need to apply validators to these
-        city = request.POST.get('city') #you need to apply validators to these
-        state = request.POST.get('state') #you need to apply validators to these
+        password = request.data['password'] #you need to apply validators to these
+        email = request.data['email'] #you need to apply validators to these
+        name = request.data['name']#you need to apply validators to these
+        age = request.data['age'] #you need to apply validators to these
+        experience = request.data['experience'] #you need to apply validators to these
+        level = request.data['level'] #you need to apply validators to these
 
-        print request.POST.get('username')
+        # request.POST.get('username')
         if User.objects.filter(username=username).exists():
             return Response({'username': 'Username is taken.', 'status': 'error'})
         elif User.objects.filter(email=email).exists():
@@ -79,7 +80,8 @@ class Register(APIView):
 
         #especially before you pass them in here
         newuser = User.objects.create_user(email=email, username=username, password=password)
-        newprofile = Profile(user=newuser, gender=gender, age=age, educationlevel=educationlevel, city=city, state=state)
+        newuser.save()
+        newprofile = PlayerProfile(user=newuser, name=name, age=age, experience=experience, level=level)
         newprofile.save()
 
         return Response({'status': 'success', 'userid': newuser.id, 'profile': newprofile.id})
@@ -120,6 +122,75 @@ class Session(APIView):
         logout(request)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+class PlayerList(APIView):
+    def get(self, request, format=None):
+      players = PlayerProfile.objects.all()
+      serializer = PlayerProfileSerializer(players, many=True)
+      return Response(serializer.data)
+
+    def post(self, request, format=None):
+      serializer = PlayerProfileSerializer(data=request.data)
+      if serializer.is_valid():
+         serializer.save()
+         return Response(serializer.data, status=status.HTTP_201_CREATED)
+      return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class GroupDetail(APIView):
+    permission_classes = (AllowAny)
+
+    #def post(self, request, *args, **kwargs):
+    #    name = request.data['name']
+    #    players = request.data['players']
+#
+#        newGroup = Group(name=name)
+#        newGroup.players.add(players)
+#        newGroup.save()
+
+#        return Response({'status': 'success', 'groupid': newGroup.id})
+
+    def get(self, request, pk, format=None):
+      try:
+          group = Group.objects.get(pk=pk)
+          serializer = GroupSerializer(group)
+          return Response(serializer.data)
+      except PlayerProfile.DoesNotExist:
+          raise Http404
+
+    def put(self, request, pk, format=None):
+      try:
+         group = Group.objects.get(pk=pk)
+         serializer = GroupSerializer(group, data=request.data)
+         if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+      except PlayerProfile.DoesNotExist:
+         raise Http404
+
+    def delete(self, request, pk, format=None):
+      try:
+         group = Group.objects.get(pk=pk)
+         group.delete()
+         return Response(status=status.HTTP_204_NO_CONTENT)
+      except PlayerProfile.DoesNotExist:
+         raise Http404
+
+class GroupList(APIView):
+   def get(self, request, format=None):
+      group = Group.objects.all()
+      serializer = GroupSerializer(group, many=True)
+      return Response(serializer.data)
+
+   def post(self, request, format=None):
+      serializer = GroupSerializer(data=request.data)
+      if serializer.is_valid():
+         serializer.save()
+         return Response(serializer.data, status=status.HTTP_201_CREATED)
+      return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 class Events(APIView):
     permission_classes = (AllowAny,)
     parser_classes = (parsers.JSONParser,parsers.FormParser)
@@ -152,7 +223,7 @@ class ActivateIFTTT(APIView):
         print newEvent
         print "Sending Device Event to IFTTT hook: " + str(event_hook)
 
-        #send the new event to IFTTT and print the result
+        #send the new event to IFTTT and  the result
         event_req = requests.post('https://maker.ifttt.com/trigger/'+str(event_hook)+'/with/key/'+api_key.key, data= {
             'value1' : timestamp,
             'value2':  "\""+str(eventtype)+"\"",
