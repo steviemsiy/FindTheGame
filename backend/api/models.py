@@ -54,14 +54,14 @@ class PlayerProfile(models.Model):
     level = models.CharField(max_length=5000, choices=STYLE)
 
     class Meta:
-        ordering = ['name']
+        ordering = ['id']
 
 class Group(models.Model):
     name = models.CharField(max_length=5000, blank=False)
     players = models.ManyToManyField(PlayerProfile)
 
     class Meta:
-        ordering = ['name']
+        ordering = ['id']
 
 class Game(models.Model):
     sport = models.CharField(max_length=5000, blank=False)

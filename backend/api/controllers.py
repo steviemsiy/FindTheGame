@@ -122,6 +122,67 @@ class Session(APIView):
         logout(request)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class PlayerJoinGroup(APIView):
+    def put(self, request, format=None):
+        group = Group.objects.get(pk=request.data['groupid'])
+        player = PlayerProfile.objects.get(pk=request.data['playerid'])
+        group.players.add(player)
+        serializer = GroupSerializer(player.group_set.all(), many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        #return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class PlayerLeaveGroup(APIView):
+    def put(self, request, format=None):
+        group = Group.objects.get(pk=request.data['groupid'])
+        player = PlayerProfile.objects.get(pk=request.data['playerid'])
+        group.players.remove(player)
+        serializer = GroupSerializer(player.group_set.all(), many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class PlayerJoinGame(APIView):
+    def put(self, request, format=None):
+        game = Game.objects.get(pk=request.data['gameid'])
+        player = PlayerProfile.objects.get(pk=request.data['playerid'])
+        game.participants.add(player)
+        serializer = GameSerializer(player.game_set.all(), many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class PlayerLeaveGame(APIView):
+    def put(self, request, format=None):
+        game = Game.objects.get(pk=request.data['gameid'])
+        player = PlayerProfile.objects.get(pk=request.data['playerid'])
+        game.participants.remove(player)
+        serializer = GameSerializer(player.game_set.all(), many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class PlayerDetail(APIView):
+    permission_classes = (AllowAny,)
+    def get(self, request, pk, format=None):
+        try:
+            player = PlayerProfile.objects.get(pk=pk)
+            serializer = PlayerProfileSerializer(player)
+            return Response(serializer.data)
+        except PlayerProfile.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk, format=None):
+        try:
+            player = PlayerProfile.objects.get(pk=pk)
+            serializer = PlayerProfileSerializer(player, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except PlayerProfile.DoesNotExist:
+            raise Http404
+
+    def delete(self, request, pk, format=None):
+        try:
+            player = PlayerProfile.objects.get(pk=pk)
+            player.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except PlayerProfile.DoesNotExist:
+            raise Http404
 
 class PlayerList(APIView):
     def get(self, request, format=None):
@@ -137,44 +198,33 @@ class PlayerList(APIView):
       return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class GroupDetail(APIView):
-    permission_classes = (AllowAny)
-
-    #def post(self, request, *args, **kwargs):
-    #    name = request.data['name']
-    #    players = request.data['players']
-#
-#        newGroup = Group(name=name)
-#        newGroup.players.add(players)
-#        newGroup.save()
-
-#        return Response({'status': 'success', 'groupid': newGroup.id})
-
+    permission_classes = (AllowAny,)
     def get(self, request, pk, format=None):
-      try:
-          group = Group.objects.get(pk=pk)
-          serializer = GroupSerializer(group)
-          return Response(serializer.data)
-      except PlayerProfile.DoesNotExist:
-          raise Http404
+        try:
+            group = Group.objects.get(pk=pk)
+            serializer = GroupSerializer(group)
+            return Response(serializer.data)
+        except PlayerProfile.DoesNotExist:
+            raise Http404
 
     def put(self, request, pk, format=None):
-      try:
-         group = Group.objects.get(pk=pk)
-         serializer = GroupSerializer(group, data=request.data)
-         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-      except PlayerProfile.DoesNotExist:
-         raise Http404
+        try:
+            group = Group.objects.get(pk=pk)
+            serializer = GroupSerializer(group, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except PlayerProfile.DoesNotExist:
+            raise Http404
 
     def delete(self, request, pk, format=None):
-      try:
-         group = Group.objects.get(pk=pk)
-         group.delete()
-         return Response(status=status.HTTP_204_NO_CONTENT)
-      except PlayerProfile.DoesNotExist:
-         raise Http404
+        try:
+            group = Group.objects.get(pk=pk)
+            group.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except PlayerProfile.DoesNotExist:
+            raise Http404
 
 class GroupList(APIView):
    def get(self, request, format=None):
@@ -184,6 +234,49 @@ class GroupList(APIView):
 
    def post(self, request, format=None):
       serializer = GroupSerializer(data=request.data)
+      if serializer.is_valid():
+         serializer.save()
+         return Response(serializer.data, status=status.HTTP_201_CREATED)
+      return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GameDetail(APIView):
+    permission_classes = (AllowAny,)
+    def get(self, request, pk, format=None):
+        try:
+            game = Game.objects.get(pk=pk)
+            serializer = GameSerializer(game)
+            return Response(serializer.data)
+        except Group.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk, format=None):
+        try:
+            game = Game.objects.get(pk=pk)
+            serializer = GameSerializer(game, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Group.DoesNotExist:
+            raise Http404
+
+    def delete(self, request, pk, format=None):
+        try:
+            game = Game.objects.get(pk=pk)
+            game.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Group.DoesNotExist:
+            raise Http404
+
+class GameList(APIView):
+   def get(self, request, format=None):
+      game = Game.objects.all()
+      serializer = GameSerializer(game, many=True)
+      return Response(serializer.data)
+
+   def post(self, request, format=None):
+      serializer = GameSerializer(data=request.data)
       if serializer.is_valid():
          serializer.save()
          return Response(serializer.data, status=status.HTTP_201_CREATED)

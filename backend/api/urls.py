@@ -16,8 +16,14 @@ urlpatterns = [
     url(r'^activateifttt', csrf_exempt(controllers.ActivateIFTTT.as_view())),
     url(r'^groups/(?P<pk>\d+)/', csrf_exempt(controllers.GroupDetail.as_view())),
     url(r'^groups/', csrf_exempt(controllers.GroupList.as_view())),
+    url(r'^players/(?P<pk>\d+)/', csrf_exempt(controllers.PlayerDetail.as_view())),
     url(r'^players/', csrf_exempt(controllers.PlayerList.as_view())),
-    #url(r'^profile', csrf_exempt(controllers.Profile.as_view())),
+    url(r'^games/(?P<pk>\d+)/', csrf_exempt(controllers.GameDetail.as_view())),
+    url(r'^games/', csrf_exempt(controllers.GameList.as_view())),
+    url(r'^joingroup/', csrf_exempt(controllers.PlayerJoinGroup.as_view())),
+    url(r'^leavegroup/', csrf_exempt(controllers.PlayerLeaveGroup.as_view())),
+    url(r'^joingame/', csrf_exempt(controllers.PlayerJoinGame.as_view())),
+    url(r'^leavegame/', csrf_exempt(controllers.PlayerLeaveGame.as_view())),
     url(r'^', include(router.urls)),
 
 ]
