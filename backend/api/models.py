@@ -58,12 +58,15 @@ class PlayerProfile(models.Model):
 
 class Group(models.Model):
     name = models.CharField(max_length=5000, blank=False)
+    description = models.CharField(max_length=5000, null=True)
     players = models.ManyToManyField(PlayerProfile)
 
     class Meta:
         ordering = ['id']
 
 class Game(models.Model):
+    name = models.CharField(max_length=5000, blank=False)
+    description = models.CharField(max_length=5000, null=True)
     sport = models.CharField(max_length=5000, blank=False)
     location = models.CharField(max_length=5000, blank=False)
     date = models.DateTimeField()

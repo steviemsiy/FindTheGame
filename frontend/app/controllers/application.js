@@ -34,26 +34,6 @@ export default Ember.Controller.extend({
         }
       });
     },
-
-    joingame(){
-      var data = {
-        groupid: this.get('id'),
-        playerid: this.get('auth.userid')
-      };
-
-      Ember.$.ajax({
-        url:'/api/joingame',
-        type:"PUT",
-        data: JSON.stringify(data),
-        contentType:"application/json",
-        dataType:"json",
-        success: function(response){
-          console.log('Attempting to join group. Response from server is: ');
-          console.log(response);
-        }
-      });
-    },
-
     register(){
       var data = {
         username: this.get('username'),

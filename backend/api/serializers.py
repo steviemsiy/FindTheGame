@@ -19,12 +19,14 @@ class GroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Group
-        fields = ['id', 'name', 'players']
+        fields = '__all__'
+        #fields = ['id', 'description', 'name', 'players']
 
 class GameSerializer(serializers.ModelSerializer):
 
     participants = PlayerProfileSerializer(read_only=True, many=True)
-    group = GroupSerializer(read_only=True)
+    #group = GroupSerializer(read_only=True)
     class Meta:
         model = Game
-        fields = ['id', 'sport', 'location', 'date', 'group', 'participants']
+        fields = '__all__'
+        #fields = ['name', 'description', 'id', 'sport', 'location', 'date', 'group', 'participants']

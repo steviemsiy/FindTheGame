@@ -4,11 +4,11 @@
 				<div class="row login-box">
 					<div class="col-sm-12 col-md-10 col-md-offset-1">
 
-            <div class="groups">
+            <div class="games">
               <ul>
-                {{#each model as |group|}}
+                {{#each model as |game|}}
                   <!-- <li>{{group.name}}</li> -->
-                  {{#active-link}}{{#link-to 'show-group' group.id}}{{group.name}}{{/link-to}}{{/active-link}}
+                  {{#active-link}}{{#link-to 'show-game' game.id}}{{game.name}}{{/link-to}}{{/active-link}}
 
                 {{/each}}
               </ul>

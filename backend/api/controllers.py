@@ -125,7 +125,8 @@ class Session(APIView):
 class PlayerJoinGroup(APIView):
     def put(self, request, format=None):
         group = Group.objects.get(pk=request.data['groupid'])
-        player = PlayerProfile.objects.get(pk=request.data['playerid'])
+        player = PlayerProfile.objects.get(user=request.data['playerid'])
+        print player
         group.players.add(player)
         serializer = GroupSerializer(player.group_set.all(), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -134,7 +135,7 @@ class PlayerJoinGroup(APIView):
 class PlayerLeaveGroup(APIView):
     def put(self, request, format=None):
         group = Group.objects.get(pk=request.data['groupid'])
-        player = PlayerProfile.objects.get(pk=request.data['playerid'])
+        player = PlayerProfile.objects.get(user=request.data['playerid'])
         group.players.remove(player)
         serializer = GroupSerializer(player.group_set.all(), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -142,7 +143,7 @@ class PlayerLeaveGroup(APIView):
 class PlayerJoinGame(APIView):
     def put(self, request, format=None):
         game = Game.objects.get(pk=request.data['gameid'])
-        player = PlayerProfile.objects.get(pk=request.data['playerid'])
+        player = PlayerProfile.objects.get(user=request.data['playerid'])
         game.participants.add(player)
         serializer = GameSerializer(player.game_set.all(), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -150,7 +151,7 @@ class PlayerJoinGame(APIView):
 class PlayerLeaveGame(APIView):
     def put(self, request, format=None):
         game = Game.objects.get(pk=request.data['gameid'])
-        player = PlayerProfile.objects.get(pk=request.data['playerid'])
+        player = PlayerProfile.objects.get(user=request.data['playerid'])
         game.participants.remove(player)
         serializer = GameSerializer(player.game_set.all(), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -227,9 +228,9 @@ class GroupDetail(APIView):
             raise Http404
 
 class GroupList(APIView):
-    permission_classes = (AllowAny,)
-    parser_classes = (parsers.JSONParser,parsers.FormParser)
-    renderer_classes = (renderers.JSONRenderer, )
+    # permission_classes = (AllowAny,)
+    # parser_classes = (parsers.JSONParser,parsers.FormParser)
+    # renderer_classes = (renderers.JSONRenderer, )
     def get(self, request, format=None):
         group = Group.objects.all()
         serializer = GroupSerializer(group, many=True)
@@ -280,6 +281,7 @@ class GameList(APIView):
 
    def post(self, request, format=None):
       serializer = GameSerializer(data=request.data)
+      print request.data
       if serializer.is_valid():
          serializer.save()
          return Response(serializer.data, status=status.HTTP_201_CREATED)
