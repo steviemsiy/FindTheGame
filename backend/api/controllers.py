@@ -227,17 +227,20 @@ class GroupDetail(APIView):
             raise Http404
 
 class GroupList(APIView):
-   def get(self, request, format=None):
-      group = Group.objects.all()
-      serializer = GroupSerializer(group, many=True)
-      return Response(serializer.data)
+    permission_classes = (AllowAny,)
+    parser_classes = (parsers.JSONParser,parsers.FormParser)
+    renderer_classes = (renderers.JSONRenderer, )
+    def get(self, request, format=None):
+        group = Group.objects.all()
+        serializer = GroupSerializer(group, many=True)
+        return Response(serializer.data)
 
-   def post(self, request, format=None):
-      serializer = GroupSerializer(data=request.data)
-      if serializer.is_valid():
-         serializer.save()
-         return Response(serializer.data, status=status.HTTP_201_CREATED)
-      return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, format=None):
+        serializer = GroupSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class GameDetail(APIView):

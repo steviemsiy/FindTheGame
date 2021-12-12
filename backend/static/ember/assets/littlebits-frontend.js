@@ -875,6 +875,14 @@ define('littlebits-frontend/components/fa-stack', ['exports', 'ember-font-awesom
     }
   });
 });
+define('littlebits-frontend/components/group-list', ['exports'], function (exports) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = Ember.Component.extend({});
+});
 define("littlebits-frontend/components/illiquid-model", ["exports", "liquid-fire/components/illiquid-model"], function (exports, _illiquidModel) {
   "use strict";
 
@@ -1143,6 +1151,36 @@ define('littlebits-frontend/controllers/application', ['exports'], function (exp
         });
       }
     }
+  });
+});
+define('littlebits-frontend/controllers/group-list', ['exports'], function (exports) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = Ember.Controller.extend({
+    arrayOFgroup: ['apple', 'pineapple', 'banana']
+    // actions:{
+    //   startgroup(){
+    //     var data = {
+    //       name: this.get('name')
+    //     };
+    //     console.log('Data about to Transmit')
+    //
+    //     Ember.$.ajax({
+    //       url:'/api/groups/',
+    //       type:"GET",
+    //       data: JSON.stringify(data),
+    //       contentType:"application/json",
+    //       dataType:"json",
+    //       success: function(response){
+    //         console.log('Attempting to Create a new Group. Response from server is: ');
+    //         console.log(response);
+    //       }
+    //     });
+    //   }
+    // }
   });
 });
 define('littlebits-frontend/controllers/index', ['exports'], function (exports) {
@@ -1964,9 +2002,59 @@ define('littlebits-frontend/router', ['exports', 'littlebits-frontend/config/env
     this.route('login');
     this.route('register');
     this.route('startgroup');
+    this.route('group-list');
   });
 
   exports.default = Router;
+});
+define('littlebits-frontend/routes/group-list', ['exports'], function (exports) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = Ember.Route.extend({
+    // model() {
+    //   var data;
+    //
+    //   Ember.$.ajax({
+    //     url:'/api/groups/',
+    //     type: 'GET',
+    //     success: function(response){
+    //       console.log(reponse)
+    //       data=JSON.parse(response)
+    //     }
+    //   });
+    //
+    //   return data;
+    // }
+
+    getData: function getData() {
+      var items = Ember.A([]);
+      console.log('sending get request through routes');
+      return Ember.$.get('/api/groups/').then(function (groups) {
+        console.log(groups);
+        // groups.forEach(function(group){
+        //   console.log(group);
+        //   items.addObject({
+        //     id: group.pk,
+        //     name: group.fields.name
+        //     //players: group.fields.players,
+        //     //link: 'index'
+        //   });
+        // });
+        return groups; //items.reverse()
+      }, function (msg) {
+        //error
+        console.log('Error loading Groups:');
+        console.log(msg.statusText);
+      });
+    },
+    model: function model() {
+      console.log('calling getdata from model');
+      return this.getData();
+    }
+  });
 });
 define('littlebits-frontend/routes/index', ['exports'], function (exports) {
   'use strict';
@@ -1992,46 +2080,45 @@ define('littlebits-frontend/routes/index', ['exports'], function (exports) {
   }]);
 
   exports.default = Ember.Route.extend({
-    getData: function getData() {
-      var items = Ember.A([]);
-      return Ember.$.get('/api/events').then(function (events) {
-        events.forEach(function (event) {
-          // console.log(event);
-          items.addObject({
-            id: event.pk,
-            eventtype: event.fields.eventtype,
-            requestor: event.fields.requestor,
-            timestamp: event.fields.timestamp,
-            userid: event.fields.userid,
-            img: 'img/event-icon.jpg',
-            link: 'index'
-          });
-        });
-        return items.reverse();
-      }, function (msg) {
-        //error
-        console.log('Error loading events:');
-        console.log(msg.statusText);
-      });
-    },
-    model: function model() {
-      return this.getData();
-    },
-    setupController: function setupController(controller, model) {
-      this._super(controller, model);
-      controller.set('defaultitems', defaultitems);
-      var route = this;
-      setInterval(Ember.run.later(route, function () {
-        // code here will execute within a RunLoop about every minute
-        if (controller.get('auth.isLoggedIn')) {
-          route.getData().then(function (data) {
-            if (data[0].id != controller.get('content')[0].id) {
-              controller.get('content').insertAt(0, data[0]);
-            }
-          });
-        }
-      }, 5), 3000);
-    }
+    // getData(){
+    //   var items = Ember.A([]);
+    //   return Ember.$.get('/api/events').then(function(events){
+    //     events.forEach(function(event){
+    //       // console.log(event);
+    //       items.addObject({
+    //         id: event.pk,
+    //         eventtype: event.fields.eventtype,
+    //         requestor: event.fields.requestor,
+    //         timestamp: event.fields.timestamp,
+    //         userid: event.fields.userid,
+    //         img: 'img/event-icon.jpg',
+    //         link: 'index'
+    //       });
+    //     });
+    //     return items.reverse()
+    //   }, function(msg){//error
+    //     console.log('Error loading events:');
+    //     console.log(msg.statusText);
+    //   });
+    // },
+    // model() {
+    //   return this.getData();
+    // },
+    // setupController(controller, model){
+    //   this._super(controller, model);
+    //   controller.set('defaultitems', defaultitems);
+    //   var route = this;
+    //   setInterval(Ember.run.later(route, function() {
+    //     // code here will execute within a RunLoop about every minute
+    //     if(controller.get('auth.isLoggedIn')){
+    //       route.getData().then(function(data){
+    //         if(data[0].id!=controller.get('content')[0].id){
+    //           controller.get('content').insertAt(0, data[0]);
+    //         }
+    //       });
+    //     }
+    //   }, 5), 3000);
+    // }
   });
 });
 define('littlebits-frontend/routes/login', ['exports'], function (exports) {
@@ -2248,6 +2335,14 @@ define('littlebits-frontend/templates/components/ember-popper', ['exports', 'emb
     }
   });
 });
+define("littlebits-frontend/templates/components/group-list", ["exports"], function (exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = Ember.HTMLBars.template({ "id": "ZgEV5D1K", "block": "{\"statements\":[[11,\"div\",[]],[15,\"class\",\"row\"],[13],[0,\"\\n\\t\"],[11,\"div\",[]],[15,\"class\",\"col-sm-6 col-md-4 login-box shadow-2\"],[13],[0,\"\\n\\t\\t\"],[11,\"form\",[]],[13],[0,\"\\n\\t\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"row login-box\"],[13],[0,\"\\n\\t\\t\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"col-sm-12 col-md-10 col-md-offset-1\"],[13],[0,\"\\n\\n            \"],[11,\"div\",[]],[15,\"class\",\"groups\"],[13],[0,\"\\n\"],[6,[\"each\"],[[28,[\"arrayOFgroup\"]]],null,{\"statements\":[[0,\"                \"],[11,\"div\",[]],[15,\"class\",\"group\"],[13],[0,\"\\n                  \"],[1,[28,[\"group\"]],false],[0,\"\\n                \"],[14],[0,\"\\n\"]],\"locals\":[\"group\"]},null],[0,\"            \"],[14],[0,\"\\n\\n            \"],[11,\"div\",[]],[15,\"class\",\"actions\"],[13],[0,\"\\n              \"],[11,\"div\",[]],[13],[0,\"\\n                \"],[11,\"button\",[]],[5,[\"action\"],[[28,[null]],\"startgroup\"]],[13],[0,\"\\n                  Create Group\\n                \"],[14],[0,\"\\n              \"],[14],[0,\"\\n            \"],[14],[0,\"\\n\\t\\t\\t\\t\\t\"],[14],[0,\"\\n\\t\\t\\t\\t\"],[14],[0,\"\\n\\n\\t\\t\"],[14],[0,\"\\n\\t\"],[14],[0,\"\\n\"],[14],[0,\"\\n\"]],\"locals\":[],\"named\":[],\"yields\":[],\"hasPartials\":false}", "meta": { "moduleName": "littlebits-frontend/templates/components/group-list.hbs" } });
+});
 define("littlebits-frontend/templates/games", ["exports"], function (exports) {
   "use strict";
 
@@ -2256,13 +2351,21 @@ define("littlebits-frontend/templates/games", ["exports"], function (exports) {
   });
   exports.default = Ember.HTMLBars.template({ "id": "NoUbhxHR", "block": "{\"statements\":[],\"locals\":[],\"named\":[],\"yields\":[],\"hasPartials\":false}", "meta": { "moduleName": "littlebits-frontend/templates/games.hbs" } });
 });
+define("littlebits-frontend/templates/group-list", ["exports"], function (exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = Ember.HTMLBars.template({ "id": "l4t3Irbn", "block": "{\"statements\":[[11,\"div\",[]],[15,\"class\",\"row\"],[13],[0,\"\\n\\t\"],[11,\"div\",[]],[15,\"class\",\"col-sm-6 col-md-4 login-box shadow-2\"],[13],[0,\"\\n\\t\\t\"],[11,\"form\",[]],[13],[0,\"\\n\\t\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"row login-box\"],[13],[0,\"\\n\\t\\t\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"col-sm-12 col-md-10 col-md-offset-1\"],[13],[0,\"\\n\\n            \"],[11,\"div\",[]],[15,\"class\",\"groups\"],[13],[0,\"\\n              \"],[11,\"ul\",[]],[13],[0,\"\\n\"],[6,[\"each\"],[[28,[\"model\"]]],null,{\"statements\":[[0,\"                  \"],[11,\"li\",[]],[13],[1,[28,[\"group\",\"name\"]],false],[14],[0,\"\\n\"]],\"locals\":[\"group\"]},null],[0,\"              \"],[14],[0,\"\\n            \"],[14],[0,\"\\n\\n\"],[6,[\"if\"],[[28,[\"auth\",\"isLoggedIn\"]]],null,{\"statements\":[[0,\"              \"],[11,\"div\",[]],[15,\"class\",\"actions\"],[13],[0,\"\\n                \"],[11,\"div\",[]],[13],[0,\"\\n                  \"],[11,\"button\",[]],[5,[\"action\"],[[28,[null]],\"startgroup\"]],[13],[0,\"\\n                    Join Group\\n                  \"],[14],[0,\"\\n                \"],[14],[0,\"\\n              \"],[14],[0,\"\\n\"]],\"locals\":[]},null],[0,\"\\t\\t\\t\\t\\t\"],[14],[0,\"\\n\\t\\t\\t\\t\"],[14],[0,\"\\n\\n\\t\\t\"],[14],[0,\"\\n\\t\"],[14],[0,\"\\n\"],[14],[0,\"\\n\"]],\"locals\":[],\"named\":[],\"yields\":[],\"hasPartials\":false}", "meta": { "moduleName": "littlebits-frontend/templates/group-list.hbs" } });
+});
 define("littlebits-frontend/templates/index", ["exports"], function (exports) {
   "use strict";
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.default = Ember.HTMLBars.template({ "id": "CHpVjlWB", "block": "{\"statements\":[[11,\"div\",[]],[15,\"class\",\"md:max-w-screen w-full pl-4 sm:px-4 xl:px-0\"],[13],[0,\"\\n  \"],[11,\"div\",[]],[15,\"class\",\"text-center overflow-hidden relative z-10 py-20\"],[13],[0,\"\\n    \"],[11,\"h2\",[]],[15,\"class\",\"text-left sm:text-center text-2xl sm:text-3xl font-semibold mb-2\"],[13],[0,\"Find the Game\"],[14],[0,\"\\n    \"],[11,\"p\",[]],[15,\"class\",\"text-left sm:text-center w-full sm:w-2/3 lg:w-1/2 mb-10 mx-auto\"],[13],[0,\"There's competitions nearby! It’s free to create an account.\"],[14],[0,\"\\n    \"],[11,\"div\",[]],[15,\"class\",\"overflow-auto mb-10 md:mb-20\"],[13],[0,\"\\n      \"],[11,\"div\",[]],[15,\"class\",\"flex flex-row  sm:space-y-0\"],[13],[0,\"\\n        \"],[11,\"div\",[]],[15,\"class\",\"flex flex-col sm:w-1/3 items-center space-y-2 px-6 p1ym4qhs flex flex-col items-center space-y-2 px-6\"],[15,\"data-testid\",\"PromoGridItem\"],[13],[0,\"\\n          \"],[11,\"div\",[]],[15,\"class\",\"text-center\"],[13],[0,\"\\n                  \"],[4,\"<a href=\\\"https://www.meetup.com/find/?source=GROUPS\\\" class=\\\"text-viridian\\\" data-element-name=\\\"joinAGroup-CTA\\\">\\n                    <h3 class=\\\"font-semibold text-xl mb-3\\\" data-testid=\\\"promo-item-title\\\">Join a group</h3>\\n                  </a>\"],[0,\"\\n                  \"],[11,\"p\",[]],[15,\"class\",\"text-sm text-center font-normal text-gray7\"],[15,\"data-testid\",\"promo-item-message\"],[13],[0,\"Do what you love, meet others who love it, find your community. The rest is history!\\n                  \"],[14],[0,\"\\n                \"],[14],[0,\"\\n              \"],[14],[0,\"\\n              \"],[11,\"div\",[]],[15,\"class\",\"flex flex-col sm:w-1/3 items-center space-y-2 px-6 p1ym4qhs flex flex-col items-center space-y-2 px-6\"],[15,\"data-testid\",\"PromoGridItem\"],[13],[0,\"\\n                \"],[11,\"div\",[]],[15,\"class\",\"text-center\"],[13],[0,\"\\n                  \"],[11,\"a\",[]],[15,\"href\",\"https://www.meetup.com/find/?source=EVENTS\"],[15,\"class\",\"text-viridian\"],[15,\"data-element-name\",\"findAnEvent-CTA\"],[13],[0,\"\\n                    \"],[11,\"h3\",[]],[15,\"class\",\"font-semibold text-xl mb-3\"],[15,\"data-testid\",\"promo-item-title\"],[13],[0,\"Find an event\\n                    \"],[14],[0,\"\\n                  \"],[14],[0,\"\\n                  \"],[11,\"p\",[]],[15,\"class\",\"text-sm text-center font-normal text-gray7\"],[15,\"data-testid\",\"promo-item-message\"],[13],[0,\"Events are happening on just about any topic you can think of, from online gaming and photography to yoga and hiking.\\n                  \"],[14],[0,\"\\n                \"],[14],[0,\"\\n              \"],[14],[0,\"\\n              \"],[11,\"div\",[]],[15,\"class\",\"flex flex-col sm:w-1/3 items-center space-y-2 px-6 p1ym4qhs flex flex-col items-center space-y-2 px-6\"],[15,\"data-testid\",\"PromoGridItem\"],[13],[0,\"\\n                \"],[11,\"div\",[]],[15,\"class\",\"text-center\"],[13],[0,\"\\n                  \"],[4,\"<a href=\\\"https://www.meetup.com/start/organizing\\\" class=\\\"text-viridian\\\" data-element-name=\\\"startAGroup-CTA\\\">\\n                    <h3 class=\\\"font-semibold text-xl mb-3\\\" data-testid=\\\"promo-item-title\\\">Start a group</h3>\\n                  </a>\"],[0,\"\\n                  \"],[6,[\"active-link\"],null,null,{\"statements\":[[6,[\"link-to\"],[\"startgroup\"],null,{\"statements\":[[0,\"Start a New Group\"]],\"locals\":[]},null]],\"locals\":[]},null],[0,\"\\n                  \"],[11,\"p\",[]],[15,\"class\",\"text-sm text-center font-normal text-gray7\"],[15,\"data-testid\",\"promo-item-message\"],[13],[0,\"You don’t have to be an expert to gather people together and explore shared interests.\\n                  \"],[14],[0,\"\\n                \"],[14],[0,\"\\n              \"],[14],[0,\"\\n            \"],[14],[0,\"\\n          \"],[14],[0,\"\\n          \"],[11,\"a\",[]],[15,\"data-element-name\",\"joinMeetup-CTA\"],[15,\"data-testid\",\"join-meetup-button\"],[15,\"class\",\"s2x9qzh float-left md:float-none inline-block  hover:no-underline\"],[15,\"href\",\"https://www.meetup.com/register/\"],[13],[0,\"Join Meetup\"],[14],[0,\"\\n          \"],[11,\"a\",[]],[15,\"data-element-name\",\"joinMeetup-CTA\"],[15,\"data-testid\",\"join-meetup-button\"],[15,\"class\",\"s2x9qzh float-left md:float-none inline-block  hover:no-underline\"],[15,\"href\",\"https://www.meetup.com/login/\"],[13],[0,\"Login\"],[14],[0,\"\\n\\n        \"],[14],[0,\"\\n      \"],[14],[0,\"\\n\"]],\"locals\":[],\"named\":[],\"yields\":[],\"hasPartials\":false}", "meta": { "moduleName": "littlebits-frontend/templates/index.hbs" } });
+  exports.default = Ember.HTMLBars.template({ "id": "+ZTq/pk7", "block": "{\"statements\":[[11,\"div\",[]],[15,\"class\",\"md:max-w-screen w-full pl-4 sm:px-4 xl:px-0\"],[13],[0,\"\\n  \"],[11,\"div\",[]],[15,\"class\",\"text-center overflow-hidden relative z-10 py-20\"],[13],[0,\"\\n    \"],[11,\"h2\",[]],[15,\"class\",\"text-left sm:text-center text-2xl sm:text-3xl font-semibold mb-2\"],[13],[0,\"Find the Game\"],[14],[0,\"\\n    \"],[11,\"p\",[]],[15,\"class\",\"text-left sm:text-center w-full sm:w-2/3 lg:w-1/2 mb-10 mx-auto\"],[13],[0,\"There's competitions nearby! It’s free to create an account.\"],[14],[0,\"\\n    \"],[11,\"div\",[]],[15,\"class\",\"overflow-auto mb-10 md:mb-20\"],[13],[0,\"\\n      \"],[11,\"div\",[]],[15,\"class\",\"flex flex-row  sm:space-y-0\"],[13],[0,\"\\n        \"],[11,\"div\",[]],[15,\"class\",\"flex flex-col sm:w-1/3 items-center space-y-2 px-6 p1ym4qhs flex flex-col items-center space-y-2 px-6\"],[15,\"data-testid\",\"PromoGridItem\"],[13],[0,\"\\n          \"],[11,\"div\",[]],[15,\"class\",\"text-center\"],[13],[0,\"\\n                  \"],[4,\"<a href=\\\"https://www.meetup.com/find/?source=GROUPS\\\" class=\\\"text-viridian\\\" data-element-name=\\\"joinAGroup-CTA\\\">\\n                    <h3 class=\\\"font-semibold text-xl mb-3\\\" data-testid=\\\"promo-item-title\\\">Join a group</h3>\\n                  </a>\"],[0,\"\\n                  \"],[6,[\"active-link\"],null,null,{\"statements\":[[6,[\"link-to\"],[\"group-list\"],null,{\"statements\":[[0,\"Find a Group\"]],\"locals\":[]},null]],\"locals\":[]},null],[0,\"\\n\\n                  \"],[11,\"p\",[]],[15,\"class\",\"text-sm text-center font-normal text-gray7\"],[15,\"data-testid\",\"promo-item-message\"],[13],[0,\"Do what you love, meet others who love it, find your community. The rest is history!\\n                  \"],[14],[0,\"\\n                \"],[14],[0,\"\\n              \"],[14],[0,\"\\n              \"],[11,\"div\",[]],[15,\"class\",\"flex flex-col sm:w-1/3 items-center space-y-2 px-6 p1ym4qhs flex flex-col items-center space-y-2 px-6\"],[15,\"data-testid\",\"PromoGridItem\"],[13],[0,\"\\n                \"],[11,\"div\",[]],[15,\"class\",\"text-center\"],[13],[0,\"\\n                  \"],[11,\"a\",[]],[15,\"href\",\"https://www.meetup.com/find/?source=EVENTS\"],[15,\"class\",\"text-viridian\"],[15,\"data-element-name\",\"findAnEvent-CTA\"],[13],[0,\"\\n                    \"],[11,\"h3\",[]],[15,\"class\",\"font-semibold text-xl mb-3\"],[15,\"data-testid\",\"promo-item-title\"],[13],[0,\"Find an event\\n                    \"],[14],[0,\"\\n                  \"],[14],[0,\"\\n                  \"],[11,\"p\",[]],[15,\"class\",\"text-sm text-center font-normal text-gray7\"],[15,\"data-testid\",\"promo-item-message\"],[13],[0,\"Events are happening on just about any topic you can think of, from online gaming and photography to yoga and hiking.\\n                  \"],[14],[0,\"\\n                \"],[14],[0,\"\\n              \"],[14],[0,\"\\n              \"],[11,\"div\",[]],[15,\"class\",\"flex flex-col sm:w-1/3 items-center space-y-2 px-6 p1ym4qhs flex flex-col items-center space-y-2 px-6\"],[15,\"data-testid\",\"PromoGridItem\"],[13],[0,\"\\n                \"],[11,\"div\",[]],[15,\"class\",\"text-center\"],[13],[0,\"\\n                  \"],[4,\"<a href=\\\"https://www.meetup.com/start/organizing\\\" class=\\\"text-viridian\\\" data-element-name=\\\"startAGroup-CTA\\\">\\n                    <h3 class=\\\"font-semibold text-xl mb-3\\\" data-testid=\\\"promo-item-title\\\">Start a group</h3>\\n                  </a>\"],[0,\"\\n                  \"],[6,[\"active-link\"],null,null,{\"statements\":[[6,[\"link-to\"],[\"startgroup\"],null,{\"statements\":[[0,\"Start a New Group\"]],\"locals\":[]},null]],\"locals\":[]},null],[0,\"\\n                  \"],[11,\"p\",[]],[15,\"class\",\"text-sm text-center font-normal text-gray7\"],[15,\"data-testid\",\"promo-item-message\"],[13],[0,\"You don’t have to be an expert to gather people together and explore shared interests.\\n                  \"],[14],[0,\"\\n                \"],[14],[0,\"\\n              \"],[14],[0,\"\\n            \"],[14],[0,\"\\n          \"],[14],[0,\"\\n          \"],[11,\"a\",[]],[15,\"data-element-name\",\"joinMeetup-CTA\"],[15,\"data-testid\",\"join-meetup-button\"],[15,\"class\",\"s2x9qzh float-left md:float-none inline-block  hover:no-underline\"],[15,\"href\",\"https://www.meetup.com/register/\"],[13],[0,\"Join Meetup\"],[14],[0,\"\\n          \"],[11,\"a\",[]],[15,\"data-element-name\",\"joinMeetup-CTA\"],[15,\"data-testid\",\"join-meetup-button\"],[15,\"class\",\"s2x9qzh float-left md:float-none inline-block  hover:no-underline\"],[15,\"href\",\"https://www.meetup.com/login/\"],[13],[0,\"Login\"],[14],[0,\"\\n\\n        \"],[14],[0,\"\\n      \"],[14],[0,\"\\n\"]],\"locals\":[],\"named\":[],\"yields\":[],\"hasPartials\":false}", "meta": { "moduleName": "littlebits-frontend/templates/index.hbs" } });
 });
 define("littlebits-frontend/templates/login", ["exports"], function (exports) {
   "use strict";
@@ -2492,6 +2595,6 @@ catch(err) {
 });
 
 if (!runningTests) {
-  require("littlebits-frontend/app")["default"].create({"name":"littlebits-frontend","version":"0.0.0+0e6065bd"});
+  require("littlebits-frontend/app")["default"].create({"name":"littlebits-frontend","version":"0.0.0+b718e9fd"});
 }
 //# sourceMappingURL=littlebits-frontend.map

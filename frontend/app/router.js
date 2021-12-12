@@ -10,6 +10,7 @@ Router.map(function() {
   this.route('login');
   this.route('register');
   this.route('startgroup');
+  this.route('group-list');
 });
 
 export default Router;
