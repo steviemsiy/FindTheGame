@@ -33,6 +33,49 @@ export default Ember.Controller.extend({
           console.log(response);
         }
       });
+    },
+
+    joingame(){
+      var data = {
+        groupid: this.get('id'),
+        playerid: this.get('auth.userid')
+      };
+
+      Ember.$.ajax({
+        url:'/api/joingame',
+        type:"PUT",
+        data: JSON.stringify(data),
+        contentType:"application/json",
+        dataType:"json",
+        success: function(response){
+          console.log('Attempting to join group. Response from server is: ');
+          console.log(response);
+        }
+      });
+    },
+
+    register(){
+      var data = {
+        username: this.get('username'),
+        email: this.get('email'),
+        password: this.get('password'),
+        age: this.get('age'),
+        experience: this.get('experience'),
+        level: this.get('level')
+      };
+      console.log('Data about to Transmit')
+
+      Ember.$.ajax({
+        url:'/api/register',
+        type:"POST",
+        data: JSON.stringify(data),
+        contentType:"application/json",
+        dataType:"json",
+        success: function(response){
+          console.log('Attempting to Create Account. Response from server is: ');
+          console.log(response);
+        }
+      });
     }
   }
 });

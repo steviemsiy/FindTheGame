@@ -12,7 +12,7 @@ define('littlebits-frontend/tests/app.lint-test', [], function () {
 
   QUnit.test('controllers/application.js', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/application.js should pass ESLint\n\n32:11 - Unexpected console statement. (no-console)\n33:11 - Unexpected console statement. (no-console)');
+    assert.ok(false, 'controllers/application.js should pass ESLint\n\n32:11 - Unexpected console statement. (no-console)\n33:11 - Unexpected console statement. (no-console)\n51:11 - Unexpected console statement. (no-console)\n52:11 - Unexpected console statement. (no-console)\n66:7 - Unexpected console statement. (no-console)\n75:11 - Unexpected console statement. (no-console)\n76:11 - Unexpected console statement. (no-console)');
   });
 
   QUnit.test('controllers/index.js', function (assert) {
@@ -23,6 +23,11 @@ define('littlebits-frontend/tests/app.lint-test', [], function () {
   QUnit.test('controllers/login.js', function (assert) {
     assert.expect(1);
     assert.ok(true, 'controllers/login.js should pass ESLint\n\n');
+  });
+
+  QUnit.test('controllers/register.js', function (assert) {
+    assert.expect(1);
+    assert.ok(false, 'controllers/register.js should pass ESLint\n\n15:7 - Unexpected console statement. (no-console)\n24:11 - Unexpected console statement. (no-console)\n25:11 - Unexpected console statement. (no-console)');
   });
 
   QUnit.test('initializers/auth-manager.js', function (assert) {
@@ -53,6 +58,11 @@ define('littlebits-frontend/tests/app.lint-test', [], function () {
   QUnit.test('routes/login.js', function (assert) {
     assert.expect(1);
     assert.ok(true, 'routes/login.js should pass ESLint\n\n');
+  });
+
+  QUnit.test('routes/register.js', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'routes/register.js should pass ESLint\n\n');
   });
 
   QUnit.test('services/auth-manager.js', function (assert) {
@@ -194,6 +204,11 @@ define('littlebits-frontend/tests/tests.lint-test', [], function () {
     assert.ok(true, 'unit/controllers/login-test.js should pass ESLint\n\n');
   });
 
+  QUnit.test('unit/controllers/register-test.js', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'unit/controllers/register-test.js should pass ESLint\n\n');
+  });
+
   QUnit.test('unit/initializers/auth-manager-test.js', function (assert) {
     assert.expect(1);
     assert.ok(true, 'unit/initializers/auth-manager-test.js should pass ESLint\n\n');
@@ -212,6 +227,11 @@ define('littlebits-frontend/tests/tests.lint-test', [], function () {
   QUnit.test('unit/routes/login-test.js', function (assert) {
     assert.expect(1);
     assert.ok(true, 'unit/routes/login-test.js should pass ESLint\n\n');
+  });
+
+  QUnit.test('unit/routes/register-test.js', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'unit/routes/register-test.js should pass ESLint\n\n');
   });
 
   QUnit.test('unit/services/auth-manager-test.js', function (assert) {
@@ -256,6 +276,20 @@ define('littlebits-frontend/tests/unit/controllers/login-test', ['ember-qunit'],
   'use strict';
 
   (0, _emberQunit.moduleFor)('controller:login', 'Unit | Controller | login', {
+    // Specify the other units that are required for this test.
+    // needs: ['controller:foo']
+  });
+
+  // Replace this with your real tests.
+  (0, _emberQunit.test)('it exists', function (assert) {
+    var controller = this.subject();
+    assert.ok(controller);
+  });
+});
+define('littlebits-frontend/tests/unit/controllers/register-test', ['ember-qunit'], function (_emberQunit) {
+  'use strict';
+
+  (0, _emberQunit.moduleFor)('controller:register', 'Unit | Controller | register', {
     // Specify the other units that are required for this test.
     // needs: ['controller:foo']
   });
@@ -333,6 +367,19 @@ define('littlebits-frontend/tests/unit/routes/login-test', ['ember-qunit'], func
   'use strict';
 
   (0, _emberQunit.moduleFor)('route:login', 'Unit | Route | login', {
+    // Specify the other units that are required for this test.
+    // needs: ['controller:foo']
+  });
+
+  (0, _emberQunit.test)('it exists', function (assert) {
+    var route = this.subject();
+    assert.ok(route);
+  });
+});
+define('littlebits-frontend/tests/unit/routes/register-test', ['ember-qunit'], function (_emberQunit) {
+  'use strict';
+
+  (0, _emberQunit.moduleFor)('route:register', 'Unit | Route | register', {
     // Specify the other units that are required for this test.
     // needs: ['controller:foo']
   });
