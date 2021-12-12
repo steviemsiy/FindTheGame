@@ -1,0 +1,28 @@
+<div class="row">
+	{{!-- Make more mobile friendly--}}
+	<div class="col-sm-6 col-md-4 login-box shadow-2" >
+		<form>
+				<div class="row login-box">
+					<div class="col-sm-12 col-md-10 col-md-offset-1">
+
+						<div class="form-group">
+							<div class="input-group">
+								<span class="input-group-addon">
+								</span>
+								{{input type="text" class="input-sm form-control" value=name enter="name" placeholder="Group Name" autofocus="autofocus"}}
+							</div>
+						</div>
+
+            <div class="actions">
+              <div>
+                <button {{action 'startgroup'}}>
+                  Create Group
+                </button>
+              </div>
+            </div>
+					</div>
+				</div>
+
+		</form>
+	</div>
+</div>

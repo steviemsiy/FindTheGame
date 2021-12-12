@@ -30,6 +30,11 @@ define('littlebits-frontend/tests/app.lint-test', [], function () {
     assert.ok(false, 'controllers/register.js should pass ESLint\n\n15:7 - Unexpected console statement. (no-console)\n24:11 - Unexpected console statement. (no-console)\n25:11 - Unexpected console statement. (no-console)');
   });
 
+  QUnit.test('controllers/startgroup.js', function (assert) {
+    assert.expect(1);
+    assert.ok(false, 'controllers/startgroup.js should pass ESLint\n\n9:7 - Unexpected console statement. (no-console)\n18:11 - Unexpected console statement. (no-console)\n19:11 - Unexpected console statement. (no-console)');
+  });
+
   QUnit.test('initializers/auth-manager.js', function (assert) {
     assert.expect(1);
     assert.ok(true, 'initializers/auth-manager.js should pass ESLint\n\n');
@@ -63,6 +68,11 @@ define('littlebits-frontend/tests/app.lint-test', [], function () {
   QUnit.test('routes/register.js', function (assert) {
     assert.expect(1);
     assert.ok(true, 'routes/register.js should pass ESLint\n\n');
+  });
+
+  QUnit.test('routes/startgroup.js', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'routes/startgroup.js should pass ESLint\n\n');
   });
 
   QUnit.test('services/auth-manager.js', function (assert) {
@@ -209,6 +219,11 @@ define('littlebits-frontend/tests/tests.lint-test', [], function () {
     assert.ok(true, 'unit/controllers/register-test.js should pass ESLint\n\n');
   });
 
+  QUnit.test('unit/controllers/startgroup-test.js', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'unit/controllers/startgroup-test.js should pass ESLint\n\n');
+  });
+
   QUnit.test('unit/initializers/auth-manager-test.js', function (assert) {
     assert.expect(1);
     assert.ok(true, 'unit/initializers/auth-manager-test.js should pass ESLint\n\n');
@@ -232,6 +247,11 @@ define('littlebits-frontend/tests/tests.lint-test', [], function () {
   QUnit.test('unit/routes/register-test.js', function (assert) {
     assert.expect(1);
     assert.ok(true, 'unit/routes/register-test.js should pass ESLint\n\n');
+  });
+
+  QUnit.test('unit/routes/startgroup-test.js', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'unit/routes/startgroup-test.js should pass ESLint\n\n');
   });
 
   QUnit.test('unit/services/auth-manager-test.js', function (assert) {
@@ -290,6 +310,20 @@ define('littlebits-frontend/tests/unit/controllers/register-test', ['ember-qunit
   'use strict';
 
   (0, _emberQunit.moduleFor)('controller:register', 'Unit | Controller | register', {
+    // Specify the other units that are required for this test.
+    // needs: ['controller:foo']
+  });
+
+  // Replace this with your real tests.
+  (0, _emberQunit.test)('it exists', function (assert) {
+    var controller = this.subject();
+    assert.ok(controller);
+  });
+});
+define('littlebits-frontend/tests/unit/controllers/startgroup-test', ['ember-qunit'], function (_emberQunit) {
+  'use strict';
+
+  (0, _emberQunit.moduleFor)('controller:startgroup', 'Unit | Controller | startgroup', {
     // Specify the other units that are required for this test.
     // needs: ['controller:foo']
   });
@@ -380,6 +414,19 @@ define('littlebits-frontend/tests/unit/routes/register-test', ['ember-qunit'], f
   'use strict';
 
   (0, _emberQunit.moduleFor)('route:register', 'Unit | Route | register', {
+    // Specify the other units that are required for this test.
+    // needs: ['controller:foo']
+  });
+
+  (0, _emberQunit.test)('it exists', function (assert) {
+    var route = this.subject();
+    assert.ok(route);
+  });
+});
+define('littlebits-frontend/tests/unit/routes/startgroup-test', ['ember-qunit'], function (_emberQunit) {
+  'use strict';
+
+  (0, _emberQunit.moduleFor)('route:startgroup', 'Unit | Route | startgroup', {
     // Specify the other units that are required for this test.
     // needs: ['controller:foo']
   });
