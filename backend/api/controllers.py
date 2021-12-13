@@ -122,6 +122,18 @@ class Session(APIView):
         logout(request)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class CheckMembership(APIView):
+    def post(self, request, *args, **kwargs):
+        group = Group.objects.get(pk=request.data['groupid'])
+        player = PlayerProfile.objects.get(user=request.data['playerid'])
+
+        return Response({'result': group.players.filter(id=player.id).exists()}, status=status.HTTP_200_OK)
+        #return Response(group.players.filter(id=player.id).exists(), status=status.HTTP_200_OK)
+        #if group.players.filter(id=player.id).exists():
+        #    return Response({'result': 'true'}, status=status.HTTP_200_OK)
+        #return Response({'result': 'false'}, status=status.HTTP_200_OK)
+
+
 class PlayerJoinGroup(APIView):
     def put(self, request, format=None):
         group = Group.objects.get(pk=request.data['groupid'])

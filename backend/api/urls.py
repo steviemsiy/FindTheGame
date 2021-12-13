@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^leavegroup/', csrf_exempt(controllers.PlayerLeaveGroup.as_view())),
     url(r'^joingame/', csrf_exempt(controllers.PlayerJoinGame.as_view())),
     url(r'^leavegame/', csrf_exempt(controllers.PlayerLeaveGame.as_view())),
+    url(r'^checkmembership/', csrf_exempt(controllers.CheckMembership.as_view())),
     url(r'^', include(router.urls)),
 
 ]

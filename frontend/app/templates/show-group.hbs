@@ -10,13 +10,23 @@
             </div>
 
             {{#if auth.isLoggedIn}}
-              <div class="actions">
-                <div>
-                  <button {{action 'joingroup' model.id auth.userid}}>
-                    Join Group
-                  </button>
-                </div>
-              </div>
+							{{#if (check-membership auth.userid model.id) }}
+							<div class="actions">
+								<div>
+									<button {{action 'joingroup' model.id auth.userid}}>
+										Leave Group
+									</button>
+								</div>
+							</div>
+							{{else}}
+								<div class="actions">
+									<div>
+										<button {{action 'joingroup' model.id auth.userid}}>
+											Join Group
+										</button>
+									</div>
+								</div>
+							{{/if}}
             {{/if}}
 					</div>
 				</div>

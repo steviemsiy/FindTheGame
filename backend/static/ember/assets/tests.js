@@ -60,6 +60,11 @@ define('littlebits-frontend/tests/app.lint-test', [], function () {
     assert.ok(false, 'controllers/startgroup.js should pass ESLint\n\n9:7 - Unexpected console statement. (no-console)\n18:11 - Unexpected console statement. (no-console)\n19:11 - Unexpected console statement. (no-console)');
   });
 
+  QUnit.test('helpers/check-membership.js', function (assert) {
+    assert.expect(1);
+    assert.ok(false, 'helpers/check-membership.js should pass ESLint\n\n5:3 - Unexpected console statement. (no-console)\n11:7 - \'result\' is assigned a value but never used. (no-unused-vars)\n12:3 - Unexpected console statement. (no-console)\n21:7 - Unexpected console statement. (no-console)\n22:7 - Unexpected console statement. (no-console)\n35:5 - Unexpected console statement. (no-console)\n38:3 - Unexpected console statement. (no-console)');
+  });
+
   QUnit.test('initializers/auth-manager.js', function (assert) {
     assert.expect(1);
     assert.ok(true, 'initializers/auth-manager.js should pass ESLint\n\n');
@@ -238,6 +243,26 @@ define('littlebits-frontend/tests/integration/components/group-list-test', ['emb
     assert.equal(this.$().text().trim(), 'template block text');
   });
 });
+define('littlebits-frontend/tests/integration/helpers/check-membership-test', ['ember-qunit'], function (_emberQunit) {
+  'use strict';
+
+  (0, _emberQunit.moduleForComponent)('check-membership', 'helper:check-membership', {
+    integration: true
+  });
+
+  // Replace this with your real tests.
+  (0, _emberQunit.test)('it renders', function (assert) {
+    this.set('inputValue', '1234');
+
+    this.render(Ember.HTMLBars.template({
+      "id": "u1RsvcZo",
+      "block": "{\"statements\":[[1,[33,[\"check-membership\"],[[28,[\"inputValue\"]]],null],false]],\"locals\":[],\"named\":[],\"yields\":[],\"hasPartials\":false}",
+      "meta": {}
+    }));
+
+    assert.equal(this.$().text().trim(), '1234');
+  });
+});
 define('littlebits-frontend/tests/test-helper', ['littlebits-frontend/tests/helpers/resolver', 'ember-qunit', 'ember-cli-qunit'], function (_resolver, _emberQunit, _emberCliQunit) {
   'use strict';
 
@@ -272,6 +297,11 @@ define('littlebits-frontend/tests/tests.lint-test', [], function () {
   QUnit.test('integration/components/group-list-test.js', function (assert) {
     assert.expect(1);
     assert.ok(true, 'integration/components/group-list-test.js should pass ESLint\n\n');
+  });
+
+  QUnit.test('integration/helpers/check-membership-test.js', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'integration/helpers/check-membership-test.js should pass ESLint\n\n');
   });
 
   QUnit.test('test-helper.js', function (assert) {
