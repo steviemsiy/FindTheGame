@@ -7,7 +7,7 @@
             <div class="groups">
               <ul>
                 {{#each model as |group|}}
-                  <!-- <li>{{group.name}}</li> -->
+                  <!-- <li>{{group.id}}, {{group.name}}</li> -->
                   {{#active-link}}{{#link-to 'show-group' group.id}}{{group.name}}{{/link-to}}{{/active-link}}
 
                 {{/each}}

@@ -18,25 +18,30 @@ export default Ember.Route.extend({
 
   getData(){
     var items = Ember.A([]);
+    var isMember = false;
     console.log('sending get request through routes');
     return Ember.$.get('/api/groups/').then(function(groups){
       console.log(groups);
-      // groups.forEach(function(group){
-      //   console.log(group);
-      //   items.addObject({
-      //     id: group.pk,
-      //     name: group.fields.name
-      //     //players: group.fields.players,
-      //     //link: 'index'
-      //   });
-      // });
-      return groups  //items.reverse()
+      groups.forEach(function(group){
+        console.log(group);
+        // isMember = group.players.filter(x => x.user == auth.userid);
+        items.addObject({
+          id: group.id,
+          name: group.name
+          // isplayer: isMember
+          //players: group.fields.players,
+          //link: 'index'
+        });
+      });
+      console.log(items);
+      console.log(groups);
+      return items // groups
     }, function(msg){//error
       console.log('Error loading Groups:');
       console.log(msg.statusText);
     });
   },
-  model() {
+  model(){
     console.log('calling getdata from model');
     return this.getData();
   }

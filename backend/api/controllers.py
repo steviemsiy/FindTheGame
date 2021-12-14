@@ -11,8 +11,7 @@ from rest_framework import status
 #from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django_filters.rest_framework import DjangoFilterBackend
-
-
+from django.utils.html import escape
 from django.shortcuts import *
 
 # Import models
@@ -41,6 +40,10 @@ import json, datetime, pytz
 from django.core import serializers
 import requests
 
+#validation
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
+
 
 def home(request):
    """
@@ -62,15 +65,20 @@ class Register(APIView):
     def post(self, request, *args, **kwargs):
         # Login
         #serializer = PlayerProfileSerializer(request.data)
-        username = request.data['username'] #you need to apply validators to these
+        username = request.data['username']
         print request.data
         print username
-        password = request.data['password'] #you need to apply validators to these
-        email = request.data['email'] #you need to apply validators to these
-        name = request.data['name']#you need to apply validators to these
-        age = request.data['age'] #you need to apply validators to these
-        experience = request.data['experience'] #you need to apply validators to these
-        level = request.data['level'] #you need to apply validators to these
+        password = request.data['password']
+        email = request.data['email']
+        name = request.data['name']
+        age = request.data['age']
+        experience = request.data['experience']
+        level = request.data['level']
+
+        try:
+            validate_email(email)
+        except ValidationError as e:
+            print("Bad Email format: ", e)
 
         # request.POST.get('username')
         if User.objects.filter(username=username).exists():

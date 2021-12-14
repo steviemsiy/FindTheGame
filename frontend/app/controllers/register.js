@@ -13,7 +13,8 @@ export default Ember.Controller.extend({
         level: this.get('level')
       };
       console.log('Data about to Transmit')
-
+      console.log(data)
+      
       Ember.$.ajax({
         url:'/api/register/',
         type:"POST",

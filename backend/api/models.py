@@ -42,16 +42,16 @@ class ApiKeyAdmin(admin.ModelAdmin):
 #    level = models.CharField(max_length=5000, choices=STYLE)
 
 class PlayerProfile(models.Model):
-    name = models.CharField(max_length=5000, blank=False)
-    user = models.ForeignKey(User, unique=True)
-    age = models.IntegerField()
-    experience = models.CharField(max_length = 5000, blank=False)
-    STYLE = (
+    STYLE_CHOICES = (
         ('Serious Players Only','Serious Players Only'),
         ('Play Hard, not Hurt','Play Hard, not Hurt'),
         ('Just Having Fun','Just Having Fun'),
     )
-    level = models.CharField(max_length=5000, choices=STYLE)
+    name = models.CharField(max_length=5000, blank=False)
+    user = models.ForeignKey(User, unique=True)
+    age = models.IntegerField()
+    experience = models.CharField(max_length = 5000, blank=False)
+    level = models.CharField(max_length=5000, choices=STYLE_CHOICES, default='Just Having Fun')
 
     class Meta:
         ordering = ['id']

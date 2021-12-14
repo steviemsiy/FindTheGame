@@ -1,0 +1,55 @@
+<div class="row">
+	{{!-- Make more mobile friendly--}}
+	<div class="col-sm-6 col-md-4 login-box shadow-2" >
+		<form>
+				<div class="row login-box">
+					<div class="col-sm-12 col-md-10 col-md-offset-1">
+
+						<div class="form-group">
+							<div class="input-group">
+								<span class="input-group-addon">
+								</span>
+								{{input type="text" class="input-sm form-control" value=name enter="name" placeholder="Event Name" autofocus="autofocus"}}
+							</div>
+						</div>
+            <div class="form-group">
+              <div class="input-group">
+                <span class="input-group-addon">
+                </span>
+                {{input type="text" class="input-sm form-control" value=description enter="description" placeholder="Game Description" autofocus="autofocus"}}
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="input-group">
+                <span class="input-group-addon">
+                </span>
+                {{input type="text" class="input-sm form-control" value=sport enter="sport" placeholder="Sport or Activity" autofocus="autofocus"}}
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="input-group">
+                <span class="input-group-addon">
+                </span>
+                {{input type="text" class="input-sm form-control" value=location enter="location" placeholder="Location" autofocus="autofocus"}}
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="input-group">
+                <span class="input-group-addon">
+                </span>
+                {{input type="text" class="input-sm form-control" value=date enter="date" placeholder="Day and Time (YYYY-MM-DDTHH:MM)" autofocus="autofocus"}}
+              </div>
+            </div>
+            <div class="actions">
+              <div>
+                <button {{action 'creategame' model.id}}>
+                  Schedule a Game
+                </button>
+              </div>
+            </div>
+					</div>
+				</div>
+
+		</form>
+	</div>
+</div>

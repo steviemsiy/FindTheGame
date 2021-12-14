@@ -6,7 +6,16 @@
 
             <div class="gameinfo">
                 <h1>{{model.name}}</h1>
-                {{model.id}}
+                <p>Description: {{model.description}}<br>
+									Sport/Activity: {{model.sport}}<br>
+									Location: {{model.location}}<br>
+									Day and Time: {{model.date}}<br>
+									Participants:
+								</p>
+
+								{{#each model.participants as |player|}}
+                  {{#active-link}}{{#link-to 'show-player' player.id}}{{player.name}}{{/link-to}}{{/active-link}}
+                {{/each}}
             </div>
 
             {{#if auth.isLoggedIn}}
