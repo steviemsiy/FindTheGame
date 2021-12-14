@@ -1143,14 +1143,14 @@ define('littlebits-frontend/controllers/create-game', ['exports'], function (exp
   });
   exports.default = Ember.Controller.extend({
     actions: {
-      creategame: function creategame(groupid) {
+      creategame: function creategame() {
         var data = {
           name: this.get('name'),
           description: this.get('description'),
           sport: this.get('sport'),
           location: this.get('location'),
-          date: JSON.stringify(new Date(this.get('date'))),
-          group: groupid
+          date: new Date(this.get('date')),
+          group: parseInt(this.get('model'))
         };
         console.log('Data about to Transmit');
         console.log(data);
@@ -1297,6 +1297,26 @@ define('littlebits-frontend/controllers/show-game', ['exports'], function (expor
             console.log(response);
           }
         });
+      },
+      leavegame: function leavegame(id, playerid) {
+        console.log(id);
+        console.log(playerid);
+        var data = {
+          gameid: id,
+          playerid: playerid
+        };
+
+        Ember.$.ajax({
+          url: '/api/leavegame/',
+          type: "PUT",
+          data: JSON.stringify(data),
+          contentType: "application/json",
+          dataType: "json",
+          success: function success(response) {
+            console.log('Attempting to leave group. Response from server is: ');
+            console.log(response);
+          }
+        });
       }
     }
   });
@@ -1325,6 +1345,26 @@ define('littlebits-frontend/controllers/show-group', ['exports'], function (expo
           dataType: "json",
           success: function success(response) {
             console.log('Attempting to join group. Response from server is: ');
+            console.log(response);
+          }
+        });
+      },
+      leavegroup: function leavegroup(id, playerid) {
+        console.log(id);
+        console.log(playerid);
+        var data = {
+          groupid: id,
+          playerid: playerid
+        };
+
+        Ember.$.ajax({
+          url: '/api/leavegroup/',
+          type: "PUT",
+          data: JSON.stringify(data),
+          contentType: "application/json",
+          dataType: "json",
+          success: function success(response) {
+            console.log('Attempting to leave group. Response from server is: ');
             console.log(response);
           }
         });
@@ -2158,7 +2198,11 @@ define('littlebits-frontend/routes/create-game', ['exports'], function (exports)
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.default = Ember.Route.extend({});
+  exports.default = Ember.Route.extend({
+    model: function model(params) {
+      return params.groupid;
+    }
+  });
 });
 define('littlebits-frontend/routes/game-list', ['exports'], function (exports) {
   'use strict';
@@ -2613,7 +2657,7 @@ define("littlebits-frontend/templates/create-game", ["exports"], function (expor
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.default = Ember.HTMLBars.template({ "id": "hUENJfI+", "block": "{\"statements\":[[11,\"div\",[]],[15,\"class\",\"row\"],[13],[0,\"\\n\"],[0,\"\\t\"],[11,\"div\",[]],[15,\"class\",\"col-sm-6 col-md-4 login-box shadow-2\"],[13],[0,\"\\n\\t\\t\"],[11,\"form\",[]],[13],[0,\"\\n\\t\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"row login-box\"],[13],[0,\"\\n\\t\\t\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"col-sm-12 col-md-10 col-md-offset-1\"],[13],[0,\"\\n\\n\\t\\t\\t\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"form-group\"],[13],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"input-group\"],[13],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[11,\"span\",[]],[15,\"class\",\"input-group-addon\"],[13],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[14],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[1,[33,[\"input\"],null,[[\"type\",\"class\",\"value\",\"enter\",\"placeholder\",\"autofocus\"],[\"text\",\"input-sm form-control\",[28,[\"name\"]],\"name\",\"Event Name\",\"autofocus\"]]],false],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[14],[0,\"\\n\\t\\t\\t\\t\\t\\t\"],[14],[0,\"\\n            \"],[11,\"div\",[]],[15,\"class\",\"form-group\"],[13],[0,\"\\n              \"],[11,\"div\",[]],[15,\"class\",\"input-group\"],[13],[0,\"\\n                \"],[11,\"span\",[]],[15,\"class\",\"input-group-addon\"],[13],[0,\"\\n                \"],[14],[0,\"\\n                \"],[1,[33,[\"input\"],null,[[\"type\",\"class\",\"value\",\"enter\",\"placeholder\",\"autofocus\"],[\"text\",\"input-sm form-control\",[28,[\"description\"]],\"description\",\"Game Description\",\"autofocus\"]]],false],[0,\"\\n              \"],[14],[0,\"\\n            \"],[14],[0,\"\\n            \"],[11,\"div\",[]],[15,\"class\",\"form-group\"],[13],[0,\"\\n              \"],[11,\"div\",[]],[15,\"class\",\"input-group\"],[13],[0,\"\\n                \"],[11,\"span\",[]],[15,\"class\",\"input-group-addon\"],[13],[0,\"\\n                \"],[14],[0,\"\\n                \"],[1,[33,[\"input\"],null,[[\"type\",\"class\",\"value\",\"enter\",\"placeholder\",\"autofocus\"],[\"text\",\"input-sm form-control\",[28,[\"sport\"]],\"sport\",\"Sport or Activity\",\"autofocus\"]]],false],[0,\"\\n              \"],[14],[0,\"\\n            \"],[14],[0,\"\\n            \"],[11,\"div\",[]],[15,\"class\",\"form-group\"],[13],[0,\"\\n              \"],[11,\"div\",[]],[15,\"class\",\"input-group\"],[13],[0,\"\\n                \"],[11,\"span\",[]],[15,\"class\",\"input-group-addon\"],[13],[0,\"\\n                \"],[14],[0,\"\\n                \"],[1,[33,[\"input\"],null,[[\"type\",\"class\",\"value\",\"enter\",\"placeholder\",\"autofocus\"],[\"text\",\"input-sm form-control\",[28,[\"location\"]],\"location\",\"Location\",\"autofocus\"]]],false],[0,\"\\n              \"],[14],[0,\"\\n            \"],[14],[0,\"\\n            \"],[11,\"div\",[]],[15,\"class\",\"form-group\"],[13],[0,\"\\n              \"],[11,\"div\",[]],[15,\"class\",\"input-group\"],[13],[0,\"\\n                \"],[11,\"span\",[]],[15,\"class\",\"input-group-addon\"],[13],[0,\"\\n                \"],[14],[0,\"\\n                \"],[1,[33,[\"input\"],null,[[\"type\",\"class\",\"value\",\"enter\",\"placeholder\",\"autofocus\"],[\"text\",\"input-sm form-control\",[28,[\"date\"]],\"date\",\"Day and Time (YYYY-MM-DDTHH:MM)\",\"autofocus\"]]],false],[0,\"\\n              \"],[14],[0,\"\\n            \"],[14],[0,\"\\n            \"],[11,\"div\",[]],[15,\"class\",\"actions\"],[13],[0,\"\\n              \"],[11,\"div\",[]],[13],[0,\"\\n                \"],[11,\"button\",[]],[5,[\"action\"],[[28,[null]],\"creategame\",[28,[\"model\",\"id\"]]]],[13],[0,\"\\n                  Schedule a Game\\n                \"],[14],[0,\"\\n              \"],[14],[0,\"\\n            \"],[14],[0,\"\\n\\t\\t\\t\\t\\t\"],[14],[0,\"\\n\\t\\t\\t\\t\"],[14],[0,\"\\n\\n\\t\\t\"],[14],[0,\"\\n\\t\"],[14],[0,\"\\n\"],[14],[0,\"\\n\"]],\"locals\":[],\"named\":[],\"yields\":[],\"hasPartials\":false}", "meta": { "moduleName": "littlebits-frontend/templates/create-game.hbs" } });
+  exports.default = Ember.HTMLBars.template({ "id": "4H0DZRXQ", "block": "{\"statements\":[[11,\"div\",[]],[15,\"class\",\"row\"],[13],[0,\"\\n\"],[0,\"\\t\"],[11,\"div\",[]],[15,\"class\",\"col-sm-6 col-md-4 login-box shadow-2\"],[13],[0,\"\\n\\t\\t\"],[11,\"form\",[]],[13],[0,\"\\n\\t\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"row login-box\"],[13],[0,\"\\n\\t\\t\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"col-sm-12 col-md-10 col-md-offset-1\"],[13],[0,\"\\n\\n\\t\\t\\t\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"form-group\"],[13],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"input-group\"],[13],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[11,\"span\",[]],[15,\"class\",\"input-group-addon\"],[13],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[14],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[1,[33,[\"input\"],null,[[\"type\",\"class\",\"value\",\"enter\",\"placeholder\",\"autofocus\"],[\"text\",\"input-sm form-control\",[28,[\"name\"]],\"name\",\"Event Name\",\"autofocus\"]]],false],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[14],[0,\"\\n\\t\\t\\t\\t\\t\\t\"],[14],[0,\"\\n            \"],[11,\"div\",[]],[15,\"class\",\"form-group\"],[13],[0,\"\\n              \"],[11,\"div\",[]],[15,\"class\",\"input-group\"],[13],[0,\"\\n                \"],[11,\"span\",[]],[15,\"class\",\"input-group-addon\"],[13],[0,\"\\n                \"],[14],[0,\"\\n                \"],[1,[33,[\"input\"],null,[[\"type\",\"class\",\"value\",\"enter\",\"placeholder\",\"autofocus\"],[\"text\",\"input-sm form-control\",[28,[\"description\"]],\"description\",\"Game Description\",\"autofocus\"]]],false],[0,\"\\n              \"],[14],[0,\"\\n            \"],[14],[0,\"\\n            \"],[11,\"div\",[]],[15,\"class\",\"form-group\"],[13],[0,\"\\n              \"],[11,\"div\",[]],[15,\"class\",\"input-group\"],[13],[0,\"\\n                \"],[11,\"span\",[]],[15,\"class\",\"input-group-addon\"],[13],[0,\"\\n                \"],[14],[0,\"\\n                \"],[1,[33,[\"input\"],null,[[\"type\",\"class\",\"value\",\"enter\",\"placeholder\",\"autofocus\"],[\"text\",\"input-sm form-control\",[28,[\"sport\"]],\"sport\",\"Sport or Activity\",\"autofocus\"]]],false],[0,\"\\n              \"],[14],[0,\"\\n            \"],[14],[0,\"\\n            \"],[11,\"div\",[]],[15,\"class\",\"form-group\"],[13],[0,\"\\n              \"],[11,\"div\",[]],[15,\"class\",\"input-group\"],[13],[0,\"\\n                \"],[11,\"span\",[]],[15,\"class\",\"input-group-addon\"],[13],[0,\"\\n                \"],[14],[0,\"\\n                \"],[1,[33,[\"input\"],null,[[\"type\",\"class\",\"value\",\"enter\",\"placeholder\",\"autofocus\"],[\"text\",\"input-sm form-control\",[28,[\"location\"]],\"location\",\"Location\",\"autofocus\"]]],false],[0,\"\\n              \"],[14],[0,\"\\n            \"],[14],[0,\"\\n            \"],[11,\"div\",[]],[15,\"class\",\"form-group\"],[13],[0,\"\\n              \"],[11,\"div\",[]],[15,\"class\",\"input-group\"],[13],[0,\"\\n                \"],[11,\"span\",[]],[15,\"class\",\"input-group-addon\"],[13],[0,\"\\n                \"],[14],[0,\"\\n                \"],[1,[33,[\"input\"],null,[[\"type\",\"class\",\"value\",\"enter\",\"placeholder\",\"autofocus\"],[\"text\",\"input-sm form-control\",[28,[\"date\"]],\"date\",\"Day and Time (YYYY-MM-DDTHH:MM)\",\"autofocus\"]]],false],[0,\"\\n              \"],[14],[0,\"\\n            \"],[14],[0,\"\\n            \"],[11,\"div\",[]],[15,\"class\",\"actions\"],[13],[0,\"\\n              \"],[11,\"div\",[]],[13],[0,\"\\n                \"],[11,\"button\",[]],[5,[\"action\"],[[28,[null]],\"creategame\"]],[13],[0,\"\\n                  Schedule Game\\n                \"],[14],[0,\"\\n              \"],[14],[0,\"\\n            \"],[14],[0,\"\\n\\t\\t\\t\\t\\t\"],[14],[0,\"\\n\\t\\t\\t\\t\"],[14],[0,\"\\n\\n\\t\\t\"],[14],[0,\"\\n\\t\"],[14],[0,\"\\n\"],[14],[0,\"\\n\"]],\"locals\":[],\"named\":[],\"yields\":[],\"hasPartials\":false}", "meta": { "moduleName": "littlebits-frontend/templates/create-game.hbs" } });
 });
 define("littlebits-frontend/templates/game-list", ["exports"], function (exports) {
   "use strict";
@@ -2891,6 +2935,6 @@ catch(err) {
 });
 
 if (!runningTests) {
-  require("littlebits-frontend/app")["default"].create({"name":"littlebits-frontend","version":"0.0.0+e3883180"});
+  require("littlebits-frontend/app")["default"].create({"name":"littlebits-frontend","version":"0.0.0+f25fc082"});
 }
 //# sourceMappingURL=littlebits-frontend.map

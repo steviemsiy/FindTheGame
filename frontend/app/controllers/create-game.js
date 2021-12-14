@@ -2,14 +2,14 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
   actions:{
-    creategame(groupid){
+    creategame(){
       var data = {
         name: this.get('name'),
         description: this.get('description'),
         sport: this.get('sport'),
         location: this.get('location'),
-        date: JSON.stringify(new Date(this.get('date'))),
-        group: groupid
+        date: new Date(this.get('date')),
+        group: parseInt(this.get('model'))
       };
       console.log('Data about to Transmit')
       console.log(data)
