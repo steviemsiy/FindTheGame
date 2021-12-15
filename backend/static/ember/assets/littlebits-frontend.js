@@ -1295,6 +1295,7 @@ define('littlebits-frontend/controllers/show-game', ['exports'], function (expor
           success: function success(response) {
             console.log('Attempting to join group. Response from server is: ');
             console.log(response);
+            window.location.reload(true);
           }
         });
       },
@@ -1315,6 +1316,7 @@ define('littlebits-frontend/controllers/show-game', ['exports'], function (expor
           success: function success(response) {
             console.log('Attempting to leave group. Response from server is: ');
             console.log(response);
+            window.location.reload(true);
           }
         });
       }
@@ -1346,6 +1348,7 @@ define('littlebits-frontend/controllers/show-group', ['exports'], function (expo
           success: function success(response) {
             console.log('Attempting to join group. Response from server is: ');
             console.log(response);
+            window.location.reload(true);
           }
         });
       },
@@ -1366,6 +1369,7 @@ define('littlebits-frontend/controllers/show-group', ['exports'], function (expo
           success: function success(response) {
             console.log('Attempting to leave group. Response from server is: ');
             console.log(response);
+            window.location.reload(true);
           }
         });
       }
@@ -3001,6 +3005,6 @@ catch(err) {
 });
 
 if (!runningTests) {
-  require("littlebits-frontend/app")["default"].create({"name":"littlebits-frontend","version":"0.0.0+51a9b218"});
+  require("littlebits-frontend/app")["default"].create({"name":"littlebits-frontend","version":"0.0.0+4b2d7210"});
 }
 //# sourceMappingURL=littlebits-frontend.map

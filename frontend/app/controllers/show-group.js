@@ -19,7 +19,7 @@ export default Ember.Controller.extend({
         success: function(response){
           console.log('Attempting to join group. Response from server is: ');
           console.log(response);
-          windows.location.reload(true);
+          window.location.reload(true);
         }
       });
     },
@@ -40,7 +40,7 @@ export default Ember.Controller.extend({
         success: function(response){
           console.log('Attempting to leave group. Response from server is: ');
           console.log(response);
-          windows.location.reload(true);
+          window.location.reload(true);
         }
       });
     }

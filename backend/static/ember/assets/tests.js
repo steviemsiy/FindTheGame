@@ -52,12 +52,12 @@ define('littlebits-frontend/tests/app.lint-test', [], function () {
 
   QUnit.test('controllers/show-game.js', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/show-game.js should pass ESLint\n\n6:7 - Unexpected console statement. (no-console)\n7:7 - Unexpected console statement. (no-console)\n20:11 - Unexpected console statement. (no-console)\n21:11 - Unexpected console statement. (no-console)\n26:7 - Unexpected console statement. (no-console)\n27:7 - Unexpected console statement. (no-console)\n40:11 - Unexpected console statement. (no-console)\n41:11 - Unexpected console statement. (no-console)');
+    assert.ok(false, 'controllers/show-game.js should pass ESLint\n\n6:7 - Unexpected console statement. (no-console)\n7:7 - Unexpected console statement. (no-console)\n20:11 - Unexpected console statement. (no-console)\n21:11 - Unexpected console statement. (no-console)\n27:7 - Unexpected console statement. (no-console)\n28:7 - Unexpected console statement. (no-console)\n41:11 - Unexpected console statement. (no-console)\n42:11 - Unexpected console statement. (no-console)');
   });
 
   QUnit.test('controllers/show-group.js', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/show-group.js should pass ESLint\n\n6:7 - Unexpected console statement. (no-console)\n7:7 - Unexpected console statement. (no-console)\n20:11 - Unexpected console statement. (no-console)\n21:11 - Unexpected console statement. (no-console)\n26:7 - Unexpected console statement. (no-console)\n27:7 - Unexpected console statement. (no-console)\n40:11 - Unexpected console statement. (no-console)\n41:11 - Unexpected console statement. (no-console)');
+    assert.ok(false, 'controllers/show-group.js should pass ESLint\n\n6:7 - Unexpected console statement. (no-console)\n7:7 - Unexpected console statement. (no-console)\n20:11 - Unexpected console statement. (no-console)\n21:11 - Unexpected console statement. (no-console)\n27:7 - Unexpected console statement. (no-console)\n28:7 - Unexpected console statement. (no-console)\n41:11 - Unexpected console statement. (no-console)\n42:11 - Unexpected console statement. (no-console)');
   });
 
   QUnit.test('controllers/startgroup.js', function (assert) {
