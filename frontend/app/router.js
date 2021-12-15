@@ -11,7 +11,7 @@ Router.map(function() {
   this.route('register');
   this.route('startgroup');
   this.route('group-list');
-  this.route('show-group', { path: '/show-group/:groupid'});
+  this.route('show-group', { path: '/show-group/:groupid/:userid'});
   //this.route('show-group', { path: '/show-group/<int:groupid>'});
   this.route('game-list');
   this.route('show-game', { path: '/show-game/:gameid'});

@@ -2182,7 +2182,7 @@ define('littlebits-frontend/router', ['exports', 'littlebits-frontend/config/env
     this.route('register');
     this.route('startgroup');
     this.route('group-list');
-    this.route('show-group', { path: '/show-group/:groupid' });
+    this.route('show-group', { path: '/show-group/:groupid/:userid' });
     //this.route('show-group', { path: '/show-group/<int:groupid>'});
     this.route('game-list');
     this.route('show-game', { path: '/show-game/:gameid' });
@@ -2410,11 +2410,77 @@ define('littlebits-frontend/routes/show-group', ['exports'], function (exports) 
         console.log(msg.statusText);
       });
     },
+    getGames: function getGames(params) {
+      var items = Ember.A([]);
+      console.log('sending get request through routes');
+      return Ember.$.get('/api/groupgames/' + params.groupid + '/').then(function (gamelist) {
+        console.log(gamelist);
+        return gamelist; //items.reverse()
+      }, function (msg) {
+        //error
+        console.log('Error finding Games in Group:');
+        console.log(msg.statusText);
+      });
+    },
+    getJoinLeave: function getJoinLeave(params) {
+      var data = {
+        groupid: params.groupid,
+        playerid: params.userid
+      };
+      var result;
+      console.log('About to check membership');
+      return Ember.$.post('/api/checkmembership/', data).then(function (response) {
+        console.log('Checked membership. Response from server is: ');
+        console.log(response.result);
+        if (response.result) {
+          result = {
+            controller: "leavegroup",
+            text: "Leave Group"
+          };
+        } else {
+          result = {
+            controller: "joingroup",
+            text: "Join Group"
+          };
+        }
+        console.log(result);
+        return result;
+      });
+      // return Ember.$.ajax({
+      //   url:'/api/checkmembership/',
+      //   type:"POST",
+      //   data: JSON.stringify(data),
+      //   contentType:"application/json",
+      //   dataType:"json",
+      //   success: function(response){
+      //     console.log('Checked membership. Response from server is: ');
+      //     console.log(response.result);
+      //     if (response.result) {
+      //       result = {
+      //         controller: "leavegroup",
+      //         text: "Leave Group"
+      //       }
+      //     } else {
+      //       result = {
+      //         controller: "joingroup",
+      //         text: "Join Group"
+      //       }
+      //     }
+      //     console.log(result);
+      //     return result;
+      //   }
+      // });
+    },
+
 
     model: function model(params) {
       console.log(params);
       console.log('calling getdata from model');
-      return this.getData(params);
+      return Em.RSVP.hash({
+        joinleave: this.getJoinLeave(params),
+        group: this.getData(params),
+        games: this.getGames(params)
+      });
     }
   });
 });
@@ -2615,7 +2681,7 @@ define("littlebits-frontend/templates/application", ["exports"], function (expor
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.default = Ember.HTMLBars.template({ "id": "lnOpirNn", "block": "{\"statements\":[[11,\"div\",[]],[15,\"class\",\"container-fluid\"],[15,\"id\",\"app-main\"],[13],[0,\"\\n\\t\"],[11,\"div\",[]],[16,\"class\",[34,[\"row row-offcanvas row-offcanvas-left \",[26,[\"showMenu\"]]]]],[13],[0,\"\\n\\t\\t\"],[4,\"   *** SIDEBAR ***\"],[0,\"\\n\\t\\t\"],[11,\"div\",[]],[15,\"id\",\"sidebar\"],[15,\"class\",\"col-xs-6 col-sm-4 col-md-3 sidebar-offcanvas\"],[13],[0,\"\\n\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"sidebar-content\"],[13],[0,\"\\n\"],[6,[\"link-to\"],[\"index\"],null,{\"statements\":[[0,\"\\t\\t\\t\\t    \"],[11,\"p\",[]],[15,\"class\",\"sidebar-p\"],[13],[11,\"img\",[]],[16,\"src\",[34,[[28,[\"constants\",\"rootURL\"]],\"img/NGC-logo.png\"]]],[15,\"width\",\"100%\"],[15,\"class\",\"img-rounded\"],[13],[14],[14],[0,\"\\n\"]],\"locals\":[]},null],[0,\"        \"],[11,\"h4\",[]],[13],[0,\"Find the Game\"],[14],[0,\"\\n\\t\\t\\t\\t\"],[4,\" <p class=\\\"sidebar-p\\\"></p> \"],[0,\"\\n\\n\\t\\t\\t\\t\"],[11,\"ul\",[]],[15,\"class\",\"sidebar-menu\"],[13],[0,\"\\n\\n\"],[6,[\"if\"],[[28,[\"auth\",\"isLoggedIn\"]]],null,{\"statements\":[[0,\"\\t\\t\\t\\t\\t\\tLogged in as: \"],[1,[28,[\"auth\",\"username\"]],false],[0,\" (\"],[11,\"a\",[]],[5,[\"action\"],[[28,[null]],\"logout\"]],[13],[0,\"Logout\"],[14],[0,\")\\n\"]],\"locals\":[]},{\"statements\":[[0,\"\\t\\t\\t\\t\\t\\t\"],[6,[\"active-link\"],null,null,{\"statements\":[[6,[\"link-to\"],[\"login\"],null,{\"statements\":[[0,\"Login\"]],\"locals\":[]},null]],\"locals\":[]},null],[0,\"\\n\"]],\"locals\":[]}],[0,\"\\t\\t\\t\\t\\t\"],[6,[\"active-link\"],null,null,{\"statements\":[[6,[\"link-to\"],[\"index\"],null,{\"statements\":[[0,\"Home\"]],\"locals\":[]},null]],\"locals\":[]},null],[0,\"\\n\\t\\t\\t\\t\\t\"],[6,[\"active-link\"],null,null,{\"statements\":[[6,[\"link-to\"],[\"register\"],null,{\"statements\":[[0,\"Create Account\"]],\"locals\":[]},null]],\"locals\":[]},null],[0,\"\\n\\t\\t\\t\\t\"],[14],[0,\"\\n\\n\\t\\t\\t\\t\"],[14],[0,\"\\n\"],[6,[\"if\"],[[28,[\"auth\",\"isLoggedIn\"]]],null,{\"statements\":[[0,\"\\t      \"],[11,\"div\",[]],[15,\"class\",\"col-xs-12\"],[13],[0,\"\\n\\n\\t        \"],[11,\"div\",[]],[15,\"class\",\"btn btn-block btn-lg btn-success\"],[5,[\"action\"],[[28,[null]],\"activateifttt\"]],[13],[11,\"span\",[]],[15,\"class\",\"glyphicon glyphicon-play\"],[13],[14],[0,\" Join Game \"],[14],[0,\"\\n\\t      \"],[14],[0,\"\\n\"]],\"locals\":[]},null],[0,\"\\t\\t\"],[14],[0,\"\\n\\t\\t\"],[4,\"   *** SIDEBAR END ***  \"],[0,\"\\n\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"col-xs-12 col-sm-8 col-md-9 content-column\"],[13],[0,\"\\n\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"small-navbar visible-xs\"],[13],[0,\"\\n\\t\\t\\t\\t\"],[11,\"button\",[]],[15,\"type\",\"button\"],[15,\"data-toggle\",\"offcanvas\"],[15,\"class\",\"btn btn-ghost pull-left\"],[5,[\"action\"],[[28,[null]],\"toggleMenu\"]],[13],[0,\" \"],[11,\"i\",[]],[15,\"class\",\"fa fa-align-left\"],[13],[0,\" \"],[14],[0,\"Menu\"],[14],[0,\"\\n\\t\\t\\t\\t\"],[11,\"h1\",[]],[15,\"class\",\"small-navbar-heading\"],[13],[6,[\"link-to\"],[\"index\"],null,{\"statements\":[[0,\"Find the Game\"]],\"locals\":[]},null],[14],[0,\"\\n\\t\\t\\t\"],[14],[0,\"\\n\\t\\t\\t\"],[1,[33,[\"liquid-outlet\"],[\"main\"],null],false],[0,\"\\n\\t\\t\"],[14],[0,\"\\n\\t\"],[14],[0,\"\\n\"],[14],[0,\"\\n\"]],\"locals\":[],\"named\":[],\"yields\":[],\"hasPartials\":false}", "meta": { "moduleName": "littlebits-frontend/templates/application.hbs" } });
+  exports.default = Ember.HTMLBars.template({ "id": "ogFXC8+8", "block": "{\"statements\":[[11,\"div\",[]],[15,\"class\",\"container-fluid\"],[15,\"id\",\"app-main\"],[13],[0,\"\\n\\t\"],[11,\"div\",[]],[16,\"class\",[34,[\"row row-offcanvas row-offcanvas-left \",[26,[\"showMenu\"]]]]],[13],[0,\"\\n\\t\\t\"],[4,\"   *** SIDEBAR ***\"],[0,\"\\n\\t\\t\"],[11,\"div\",[]],[15,\"id\",\"sidebar\"],[15,\"class\",\"col-xs-6 col-sm-4 col-md-3 sidebar-offcanvas\"],[13],[0,\"\\n\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"sidebar-content\"],[13],[0,\"\\n\"],[6,[\"link-to\"],[\"index\"],null,{\"statements\":[[0,\"\\t\\t\\t\\t    \"],[11,\"p\",[]],[15,\"class\",\"sidebar-p\"],[13],[11,\"img\",[]],[16,\"src\",[34,[[28,[\"constants\",\"rootURL\"]],\"img/NGC-logo.png\"]]],[15,\"width\",\"100%\"],[15,\"class\",\"img-rounded\"],[13],[14],[14],[0,\"\\n\"]],\"locals\":[]},null],[0,\"        \"],[11,\"h4\",[]],[13],[0,\"Find the Game\"],[14],[0,\"\\n\\t\\t\\t\\t\"],[4,\" <p class=\\\"sidebar-p\\\"></p> \"],[0,\"\\n\\n\\t\\t\\t\\t\"],[11,\"ul\",[]],[15,\"class\",\"sidebar-menu\"],[13],[0,\"\\n\\n\\t\\t\\t\\t\\t\"],[6,[\"active-link\"],null,null,{\"statements\":[[6,[\"link-to\"],[\"index\"],null,{\"statements\":[[0,\"Home\"]],\"locals\":[]},null]],\"locals\":[]},null],[0,\"\\n\"],[6,[\"if\"],[[28,[\"auth\",\"isLoggedIn\"]]],null,{\"statements\":[[0,\"\\t\\t\\t\\t\\t\\tLogged in as: \"],[1,[28,[\"auth\",\"username\"]],false],[0,\" (\"],[11,\"a\",[]],[5,[\"action\"],[[28,[null]],\"logout\"]],[13],[0,\"Logout\"],[14],[0,\")\\n\"]],\"locals\":[]},{\"statements\":[[0,\"\\t\\t\\t\\t\\t\\t\"],[6,[\"active-link\"],null,null,{\"statements\":[[6,[\"link-to\"],[\"login\"],null,{\"statements\":[[0,\"Login\"]],\"locals\":[]},null]],\"locals\":[]},null],[0,\"\\n\\t\\t\\t\\t\\t\\t\"],[6,[\"active-link\"],null,null,{\"statements\":[[6,[\"link-to\"],[\"register\"],null,{\"statements\":[[0,\"Create Account\"]],\"locals\":[]},null]],\"locals\":[]},null],[0,\"\\n\"]],\"locals\":[]}],[0,\"\\n\\t\\t\\t\\t\"],[14],[0,\"\\n\\t\\t\\t\\t\"],[14],[0,\"\\n\\t\\t\"],[14],[0,\"\\n\\t\\t\"],[4,\"   *** SIDEBAR END ***  \"],[0,\"\\n\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"col-xs-12 col-sm-8 col-md-9 content-column\"],[13],[0,\"\\n\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"small-navbar visible-xs\"],[13],[0,\"\\n\\t\\t\\t\\t\"],[11,\"button\",[]],[15,\"type\",\"button\"],[15,\"data-toggle\",\"offcanvas\"],[15,\"class\",\"btn btn-ghost pull-left\"],[5,[\"action\"],[[28,[null]],\"toggleMenu\"]],[13],[0,\" \"],[11,\"i\",[]],[15,\"class\",\"fa fa-align-left\"],[13],[0,\" \"],[14],[0,\"Menu\"],[14],[0,\"\\n\\t\\t\\t\\t\"],[11,\"h1\",[]],[15,\"class\",\"small-navbar-heading\"],[13],[6,[\"link-to\"],[\"index\"],null,{\"statements\":[[0,\"Find the Game\"]],\"locals\":[]},null],[14],[0,\"\\n\\t\\t\\t\"],[14],[0,\"\\n\\t\\t\\t\"],[1,[33,[\"liquid-outlet\"],[\"main\"],null],false],[0,\"\\n\\t\\t\"],[14],[0,\"\\n\\t\"],[14],[0,\"\\n\"],[14],[0,\"\\n\"]],\"locals\":[],\"named\":[],\"yields\":[],\"hasPartials\":false}", "meta": { "moduleName": "littlebits-frontend/templates/application.hbs" } });
 });
 define('littlebits-frontend/templates/components/ember-popper-targeting-parent', ['exports', 'ember-popper/templates/components/ember-popper-targeting-parent'], function (exports, _emberPopperTargetingParent) {
   'use strict';
@@ -2673,7 +2739,7 @@ define("littlebits-frontend/templates/group-list", ["exports"], function (export
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.default = Ember.HTMLBars.template({ "id": "qINPrw1H", "block": "{\"statements\":[[11,\"div\",[]],[15,\"class\",\"row\"],[13],[0,\"\\n\\t\"],[11,\"div\",[]],[15,\"class\",\"col-sm-6 col-md-4 login-box shadow-2\"],[13],[0,\"\\n\\t\\t\"],[11,\"form\",[]],[13],[0,\"\\n\\t\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"row login-box\"],[13],[0,\"\\n\\t\\t\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"col-sm-12 col-md-10 col-md-offset-1\"],[13],[0,\"\\n\\n            \"],[11,\"div\",[]],[15,\"class\",\"groups\"],[13],[0,\"\\n              \"],[11,\"ul\",[]],[13],[0,\"\\n\"],[6,[\"each\"],[[28,[\"model\"]]],null,{\"statements\":[[0,\"                  \"],[4,\" <li>{{group.id}}, {{group.name}}</li> \"],[0,\"\\n                  \"],[6,[\"active-link\"],null,null,{\"statements\":[[6,[\"link-to\"],[\"show-group\",[28,[\"group\",\"id\"]]],null,{\"statements\":[[1,[28,[\"group\",\"name\"]],false]],\"locals\":[]},null]],\"locals\":[]},null],[0,\"\\n\\n\"]],\"locals\":[\"group\"]},null],[0,\"              \"],[14],[0,\"\\n            \"],[14],[0,\"\\n\\t\\t\\t\\t\\t\"],[14],[0,\"\\n\\t\\t\\t\\t\"],[14],[0,\"\\n\\n\\t\\t\"],[14],[0,\"\\n\\t\"],[14],[0,\"\\n\"],[14],[0,\"\\n\"]],\"locals\":[],\"named\":[],\"yields\":[],\"hasPartials\":false}", "meta": { "moduleName": "littlebits-frontend/templates/group-list.hbs" } });
+  exports.default = Ember.HTMLBars.template({ "id": "apLm9s/5", "block": "{\"statements\":[[11,\"div\",[]],[15,\"class\",\"row\"],[13],[0,\"\\n\\t\"],[11,\"div\",[]],[15,\"class\",\"col-sm-6 col-md-4 login-box shadow-2\"],[13],[0,\"\\n\\t\\t\"],[11,\"form\",[]],[13],[0,\"\\n\\t\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"row login-box\"],[13],[0,\"\\n\\t\\t\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"col-sm-12 col-md-10 col-md-offset-1\"],[13],[0,\"\\n\\n            \"],[11,\"div\",[]],[15,\"class\",\"groups\"],[13],[0,\"\\n              \"],[11,\"ul\",[]],[13],[0,\"\\n\"],[6,[\"each\"],[[28,[\"model\"]]],null,{\"statements\":[[0,\"                  \"],[4,\" <li>{{group.id}}, {{group.name}}</li> \"],[0,\"\\n                  \"],[6,[\"active-link\"],null,null,{\"statements\":[[6,[\"link-to\"],[\"show-group\",[28,[\"group\",\"id\"]],[28,[\"auth\",\"userid\"]]],null,{\"statements\":[[1,[28,[\"group\",\"name\"]],false]],\"locals\":[]},null]],\"locals\":[]},null],[0,\"\\n\\n\"]],\"locals\":[\"group\"]},null],[0,\"              \"],[14],[0,\"\\n            \"],[14],[0,\"\\n\\t\\t\\t\\t\\t\"],[14],[0,\"\\n\\t\\t\\t\\t\"],[14],[0,\"\\n\\n\\t\\t\"],[14],[0,\"\\n\\t\"],[14],[0,\"\\n\"],[14],[0,\"\\n\"]],\"locals\":[],\"named\":[],\"yields\":[],\"hasPartials\":false}", "meta": { "moduleName": "littlebits-frontend/templates/group-list.hbs" } });
 });
 define("littlebits-frontend/templates/index", ["exports"], function (exports) {
   "use strict";
@@ -2713,7 +2779,7 @@ define("littlebits-frontend/templates/show-group", ["exports"], function (export
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.default = Ember.HTMLBars.template({ "id": "U59g0ib/", "block": "{\"statements\":[[11,\"div\",[]],[15,\"class\",\"row\"],[13],[0,\"\\n\\t\"],[11,\"div\",[]],[15,\"class\",\"col-sm-6 col-md-4 login-box shadow-2\"],[13],[0,\"\\n\\t\\t\"],[11,\"form\",[]],[13],[0,\"\\n\\t\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"row login-box\"],[13],[0,\"\\n\\t\\t\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"col-sm-12 col-md-10 col-md-offset-1\"],[13],[0,\"\\n\\n            \"],[11,\"div\",[]],[15,\"class\",\"groupinfo\"],[13],[0,\"\\n                \"],[11,\"h1\",[]],[13],[1,[28,[\"model\",\"name\"]],false],[14],[0,\"\\n                \"],[11,\"h2\",[]],[13],[1,[28,[\"model\",\"description\"]],false],[14],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[4,\" {{model.players}} \"],[0,\"\\n\"],[6,[\"each\"],[[28,[\"model\",\"players\"]]],null,{\"statements\":[[0,\"                  \"],[6,[\"active-link\"],null,null,{\"statements\":[[6,[\"link-to\"],[\"show-player\",[28,[\"player\",\"id\"]]],null,{\"statements\":[[1,[28,[\"player\",\"name\"]],false]],\"locals\":[]},null]],\"locals\":[]},null],[0,\"\\n\"]],\"locals\":[\"player\"]},null],[0,\"\\n            \"],[14],[0,\"\\n\\n\"],[6,[\"if\"],[[28,[\"auth\",\"isLoggedIn\"]]],null,{\"statements\":[[6,[\"if\"],[[33,[\"check-membership\"],[[28,[\"auth\",\"userid\"]],[28,[\"model\",\"id\"]]],null]],null,{\"statements\":[[0,\"\\t\\t\\t\\t\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"actions\"],[13],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[11,\"div\",[]],[13],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\\t\"],[11,\"button\",[]],[5,[\"action\"],[[28,[null]],\"joingroup\",[28,[\"model\",\"id\"]],[28,[\"auth\",\"userid\"]]]],[13],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\\t\\tLeave Group\\n\\t\\t\\t\\t\\t\\t\\t\\t\\t\"],[14],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[14],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[14],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[4,\" <div class=\\\"actions\\\">\\n\\t\\t\\t\\t\\t\\t\\t\\t<div>\\n\\t\\t\\t\\t\\t\\t\\t\\t\\t<button {{action 'creategame' model.id auth.userid}}>\\n\\t\\t\\t\\t\\t\\t\\t\\t\\t\\tSchedule a Game\\n\\t\\t\\t\\t\\t\\t\\t\\t\\t</button>\\n\\t\\t\\t\\t\\t\\t\\t\\t</div>\\n\\t\\t\\t\\t\\t\\t\\t</div> \"],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[6,[\"active-link\"],null,null,{\"statements\":[[6,[\"link-to\"],[\"create-game\",[28,[\"model\",\"id\"]]],null,{\"statements\":[[0,\"Schedule a Game\"]],\"locals\":[]},null]],\"locals\":[]},null],[0,\"\\n\\n\"]],\"locals\":[]},{\"statements\":[[0,\"\\t\\t\\t\\t\\t\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"actions\"],[13],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\\t\"],[11,\"div\",[]],[13],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\\t\\t\"],[11,\"button\",[]],[5,[\"action\"],[[28,[null]],\"joingroup\",[28,[\"model\",\"id\"]],[28,[\"auth\",\"userid\"]]]],[13],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\\t\\t\\tJoin Group\\n\\t\\t\\t\\t\\t\\t\\t\\t\\t\\t\"],[14],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\\t\"],[14],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[14],[0,\"\\n\"]],\"locals\":[]}]],\"locals\":[]},null],[0,\"\\n\\t\\t\\t\\t\\t\"],[14],[0,\"\\n\\t\\t\\t\\t\"],[14],[0,\"\\n\\n\\t\\t\"],[14],[0,\"\\n\\t\"],[14],[0,\"\\n\"],[14],[0,\"\\n\"]],\"locals\":[],\"named\":[],\"yields\":[],\"hasPartials\":false}", "meta": { "moduleName": "littlebits-frontend/templates/show-group.hbs" } });
+  exports.default = Ember.HTMLBars.template({ "id": "VCw/FnQ+", "block": "{\"statements\":[[11,\"div\",[]],[15,\"class\",\"row\"],[13],[0,\"\\n\\t\"],[11,\"div\",[]],[15,\"class\",\"col-sm-6 col-md-4 login-box shadow-2\"],[13],[0,\"\\n\\t\\t\"],[11,\"form\",[]],[13],[0,\"\\n\\t\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"row login-box\"],[13],[0,\"\\n\\t\\t\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"col-sm-12 col-md-10 col-md-offset-1\"],[13],[0,\"\\n\\n            \"],[11,\"div\",[]],[15,\"class\",\"groupinfo\"],[13],[0,\"\\n                \"],[11,\"h1\",[]],[13],[1,[28,[\"model\",\"group\",\"name\"]],false],[14],[0,\"\\n                \"],[11,\"h2\",[]],[13],[1,[28,[\"model\",\"group\",\"description\"]],false],[14],[0,\"\\n\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[11,\"h3\",[]],[13],[0,\"Players in Group:\"],[14],[0,\"\\n\"],[6,[\"each\"],[[28,[\"model\",\"group\",\"players\"]]],null,{\"statements\":[[0,\"                  \"],[6,[\"active-link\"],null,null,{\"statements\":[[6,[\"link-to\"],[\"show-player\",[28,[\"player\",\"id\"]]],null,{\"statements\":[[1,[28,[\"player\",\"name\"]],false]],\"locals\":[]},null]],\"locals\":[]},null],[0,\"\\n\"]],\"locals\":[\"player\"]},null],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[11,\"h3\",[]],[13],[0,\"Games organized by Group:\"],[14],[0,\"\\n\"],[6,[\"each\"],[[28,[\"model\",\"games\"]]],null,{\"statements\":[[0,\"                  \"],[6,[\"active-link\"],null,null,{\"statements\":[[6,[\"link-to\"],[\"show-game\",[28,[\"game\",\"id\"]]],null,{\"statements\":[[1,[28,[\"game\",\"name\"]],false]],\"locals\":[]},null]],\"locals\":[]},null],[0,\"\\n\"]],\"locals\":[\"game\"]},null],[0,\"\\n            \"],[14],[0,\"\\n\\n\\n\"],[6,[\"if\"],[[28,[\"auth\",\"isLoggedIn\"]]],null,{\"statements\":[[0,\"\\t\\t\\t\\t\\t\\t\\t\"],[11,\"div\",[]],[15,\"class\",\"actions\"],[13],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[11,\"div\",[]],[13],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\\t\"],[11,\"button\",[]],[5,[\"action\"],[[28,[null]],[28,[\"model\",\"joinleave\",\"controller\"]],[28,[\"model\",\"group\",\"id\"]],[28,[\"auth\",\"userid\"]]]],[13],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\\t\\t\"],[1,[28,[\"model\",\"joinleave\",\"text\"]],false],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\\t\"],[14],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[14],[0,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[14],[0,\"\\n\\n\\t\\t\\t\\t\\t\\t\\t\"],[6,[\"active-link\"],null,null,{\"statements\":[[6,[\"link-to\"],[\"create-game\",[28,[\"model\",\"group\",\"id\"]]],null,{\"statements\":[[0,\"Schedule a Game\"]],\"locals\":[]},null]],\"locals\":[]},null],[0,\"\\n\\n\"]],\"locals\":[]},null],[0,\"\\n\\t\\t\\t\\t\\t\"],[14],[0,\"\\n\\t\\t\\t\\t\"],[14],[0,\"\\n\\t\\t\"],[14],[0,\"\\n\\t\"],[14],[0,\"\\n\"],[14],[0,\"\\n\"]],\"locals\":[],\"named\":[],\"yields\":[],\"hasPartials\":false}", "meta": { "moduleName": "littlebits-frontend/templates/show-group.hbs" } });
 });
 define("littlebits-frontend/templates/show-player", ["exports"], function (exports) {
   "use strict";
@@ -2935,6 +3001,6 @@ catch(err) {
 });
 
 if (!runningTests) {
-  require("littlebits-frontend/app")["default"].create({"name":"littlebits-frontend","version":"0.0.0+f25fc082"});
+  require("littlebits-frontend/app")["default"].create({"name":"littlebits-frontend","version":"0.0.0+af3b2d97"});
 }
 //# sourceMappingURL=littlebits-frontend.map

@@ -5,47 +5,37 @@
 					<div class="col-sm-12 col-md-10 col-md-offset-1">
 
             <div class="groupinfo">
-                <h1>{{model.name}}</h1>
-                <h2>{{model.description}}</h2>
-								<!-- {{model.players}} -->
-								{{#each model.players as |player|}}
+                <h1>{{model.group.name}}</h1>
+                <h2>{{model.group.description}}</h2>
+
+								<h3>Players in Group:</h3>
+								{{#each model.group.players as |player|}}
                   {{#active-link}}{{#link-to 'show-player' player.id}}{{player.name}}{{/link-to}}{{/active-link}}
+                {{/each}}
+
+								<h3>Games organized by Group:</h3>
+								{{#each model.games as |game|}}
+                  {{#active-link}}{{#link-to 'show-game' game.id}}{{game.name}}{{/link-to}}{{/active-link}}
                 {{/each}}
 
             </div>
 
+
             {{#if auth.isLoggedIn}}
-							{{#if (check-membership auth.userid model.id) }}
 							<div class="actions">
 								<div>
-									<button {{action 'joingroup' model.id auth.userid}}>
-										Leave Group
+									<button {{action model.joinleave.controller model.group.id auth.userid}}>
+										{{ model.joinleave.text }}
 									</button>
 								</div>
 							</div>
-							<!-- <div class="actions">
-								<div>
-									<button {{action 'creategame' model.id auth.userid}}>
-										Schedule a Game
-									</button>
-								</div>
-							</div> -->
-							{{#active-link}}{{#link-to 'create-game' model.id}}Schedule a Game{{/link-to}}{{/active-link}}
 
-							{{else}}
-								<div class="actions">
-									<div>
-										<button {{action 'joingroup' model.id auth.userid}}>
-											Join Group
-										</button>
-									</div>
-								</div>
-							{{/if}}
+							{{#active-link}}{{#link-to 'create-game' model.group.id}}Schedule a Game{{/link-to}}{{/active-link}}
+
             {{/if}}
 
 					</div>
 				</div>
-
 		</form>
 	</div>
 </div>

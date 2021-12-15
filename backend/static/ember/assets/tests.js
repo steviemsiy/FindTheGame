@@ -127,7 +127,7 @@ define('littlebits-frontend/tests/app.lint-test', [], function () {
 
   QUnit.test('routes/show-group.js', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'routes/show-group.js should pass ESLint\n\n5:9 - \'items\' is assigned a value but never used. (no-unused-vars)\n6:5 - Unexpected console statement. (no-console)\n8:7 - Unexpected console statement. (no-console)\n11:7 - Unexpected console statement. (no-console)\n12:7 - Unexpected console statement. (no-console)\n16:5 - Unexpected console statement. (no-console)\n17:5 - Unexpected console statement. (no-console)');
+    assert.ok(false, 'routes/show-group.js should pass ESLint\n\n5:9 - \'items\' is assigned a value but never used. (no-unused-vars)\n6:5 - Unexpected console statement. (no-console)\n8:7 - Unexpected console statement. (no-console)\n11:7 - Unexpected console statement. (no-console)\n12:7 - Unexpected console statement. (no-console)\n17:9 - \'items\' is assigned a value but never used. (no-unused-vars)\n18:5 - Unexpected console statement. (no-console)\n20:7 - Unexpected console statement. (no-console)\n23:7 - Unexpected console statement. (no-console)\n24:7 - Unexpected console statement. (no-console)\n34:5 - Unexpected console statement. (no-console)\n36:7 - Unexpected console statement. (no-console)\n37:7 - Unexpected console statement. (no-console)\n49:7 - Unexpected console statement. (no-console)\n79:5 - Unexpected console statement. (no-console)\n80:5 - Unexpected console statement. (no-console)\n81:12 - \'Em\' is not defined. (no-undef)');
   });
 
   QUnit.test('routes/show-player.js', function (assert) {

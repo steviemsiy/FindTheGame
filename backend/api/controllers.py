@@ -141,6 +141,12 @@ class CheckMembership(APIView):
         #    return Response({'result': 'true'}, status=status.HTTP_200_OK)
         #return Response({'result': 'false'}, status=status.HTTP_200_OK)
 
+class GroupGames(APIView):
+    def get(self, request, pk, format=None):
+        group = Group.objects.get(pk=pk)
+        games = group.game_set.all()
+        serializer = GameSerializer(games, many=True)
+        return Response(serializer.data)
 
 class PlayerJoinGroup(APIView):
     def put(self, request, format=None):

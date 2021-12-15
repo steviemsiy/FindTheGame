@@ -11,22 +11,16 @@
 
 				<ul class="sidebar-menu">
 
+					{{#active-link}}{{#link-to 'index'}}Home{{/link-to}}{{/active-link}}
 					{{#if auth.isLoggedIn}}
 						Logged in as: {{auth.username}} (<a {{action "logout"}}>Logout</a>)
 					{{else}}
 						{{#active-link}}{{#link-to 'login'}}Login{{/link-to}}{{/active-link}}
+						{{#active-link}}{{#link-to 'register'}}Create Account{{/link-to}}{{/active-link}}
 					{{/if}}
-					{{#active-link}}{{#link-to 'index'}}Home{{/link-to}}{{/active-link}}
-					{{#active-link}}{{#link-to 'register'}}Create Account{{/link-to}}{{/active-link}}
+
 				</ul>
-
 				</div>
-			{{#if auth.isLoggedIn}}
-	      <div class="col-xs-12">
-
-	        <div class="btn btn-block btn-lg btn-success" {{action 'activateifttt'}}><span class="glyphicon glyphicon-play"></span> Join Game </div>
-	      </div>
-			{{/if}}
 		</div>
 		<!--   *** SIDEBAR END ***  -->
 		<div class="col-xs-12 col-sm-8 col-md-9 content-column">

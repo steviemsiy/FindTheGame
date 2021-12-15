@@ -8,7 +8,7 @@
               <ul>
                 {{#each model as |group|}}
                   <!-- <li>{{group.id}}, {{group.name}}</li> -->
-                  {{#active-link}}{{#link-to 'show-group' group.id}}{{group.name}}{{/link-to}}{{/active-link}}
+                  {{#active-link}}{{#link-to 'show-group' group.id auth.userid}}{{group.name}}{{/link-to}}{{/active-link}}
 
                 {{/each}}
               </ul>
