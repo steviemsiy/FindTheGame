@@ -38,7 +38,8 @@ A functionality will be enabled to report users that are not using the site prop
 
 ## Diagrams
 ### Mock-Up
-![Tooltip for visually disabled](./FtGMockup.jpg)
+![Tooltip for visually disabled](./FtGMockups.jpg)
 
 ### Architecture Diagrams
-![Tooltip for visually disabled](./ArchitectureDiags.jpg)
+![Tooltip for visually disabled](./ArchitectureDiagrams.jpg)
+![Tooltip for visually disabled](./ArchitectureComponenetDiag.jpg)
