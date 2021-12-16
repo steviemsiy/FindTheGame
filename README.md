@@ -42,4 +42,4 @@ A functionality will be enabled to report users that are not using the site prop
 
 ### Architecture Diagrams
 ![Tooltip for visually disabled](./ArchitectureDiagrams.jpg)
-![Tooltip for visually disabled](./ArchitectureComponenetDiag.jpg)
+![Tooltip for visually disabled](./ArchitectureComponentDiag.jpg)
