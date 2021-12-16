@@ -23,18 +23,18 @@ As a player, I want to create a profile so that other users can know my backgrou
 **Acceptance Criteria**
 * Given that the user has created a profile that includes athletic history, then other users will be able to see and make sure that everyone gets what they want out of the app. 
 
-As an administrator I want to be able read over feedback from users (including any possible reports of fraudulent users) so that I can keep my app up to date and work toward maintaining a safe environment for users.
+As an administrator I want to have control over created objects so that I can keep my a safe environment for users.
 **Acceptance Criteria**
-* Given that a user has admin privileges, when reports or feedback surveys are submitted then that user will be able to read feedback and be able to manage potential users (i.e. delete them).
+* Given that a user has admin privileges, when logged in to the administrator url route, that user can manage and take care of all created objects.
 
 ## Misuser Stories
 As a malicious user I want to post injection attacks so that user information can be taken without consent.
 **Mitigation Criteria**
-Any information inputted into a field within Find the Game will be put cleaned to ensure no information will be secretly uploaded.
+Any information inputted into a field within Find the Game will be sanitized to ensure no information will be secretly uploaded.
 
-As a malicious user I want to post fake meeting times and locations to physically ensure that other people will be exactly where I want them to be.
+As a malicious user I want to be able to join groups and games without logging in to fill the game with fake profiles.
 **Mitigation Criteria**
-A functionality will be enabled to report users that are not using the site properly.
+Only aggregated users will be given the join game/group functionality.
 
 ## Diagrams
 ### Mock-Up
